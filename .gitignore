@@ -1,0 +1,9 @@
+ .coverage
+__pycache__/
+app/
+coverage
+data_store/
+instance/
+tests/
+venv/
+.coverage

@@ -35,13 +35,12 @@
 
     <div style="overflow:auto">
         <div class="menu">
-
+            <a href="home.html">HOME</a>
             <a href="active_orders.html">Active Orders</a>
             <a href="edit_order_select.html">Edit Destination Address</a>
             <a href="cancel_order_select.html">Cancel Delivery</a>
             <a href="order_history.html">Order History</a>
             <a href="user_profile.html">User Profile</a>
-            <a href="home.html">HOME</a>
             &nbsp;
 
             <div style="margin: 0 auto !important;">
@@ -55,39 +54,42 @@
                 Life - <img src="images/favicon.png" alt=""> SendIT Now.</p>
             <h2>Your Active Delivery Orders List</h2>
             <div style="width:100%">
-                <table>
+                <table style="width:100%">
                     <tr>
                         <th>Id</th>
                         <th>Code</th>
                         <th>Time Created</th>
-                        <th>Parcel Description</th>
                         <th>Receiver Name</th>
                         <th>Receiver Contact</th>
                         <th>Destination</th>
                         <th>Current Location</th>
                         <th>Status</th>
+                        <th>a1</th>
+                        <th>a2</th>
                     </tr>
                     <tr>
                         <td>1</td>
                         <td><a href="order_detail.html">i1351</a></td>
                         <td>30 Mins Ago</td>
-                        <td>Office documents.</td>
                         <td>Prime Minister's Office</td>
                         <td>0414 253 2523</td>
                         <td>Kampala, Uganda</td>
                         <td>Kampala Road</td>
                         <td id="on_route">On-Route</td>
+                        <td><a href="edit_order.html"><img id="contact_images" src="images/edit.png" alt="" /></a></td>
+                        <td><a href="#"><img id="contact_images" src="images/cancel.png" alt="" /></a></td>
                     </tr>
                     <tr>
                         <td>2</td>
                         <td><a href="order_detail.html">i5626</a></td>
                         <td>3 Hours Ago</td>
-                        <td>Office Stationery Supplies</td>
                         <td>Kisekka Joseph</td>
                         <td>0772248621</td>
                         <td>Charm Towers, 6th Floor</td>
                         <td>Kampala Road</td>
                         <td id="on_route">On-Route</td>
+                        <td><a href="edit_order.html"><img id="contact_images" src="images/edit.png" alt="" /></a></td>
+                        <td><a href="#"><img id="contact_images" src="images/cancel.png" alt="" /></a></td>
                     </tr>
                     
                 </table>
@@ -96,17 +98,18 @@
 
         </div>
 
-        <div class="right">
-            <h2>INFO</h2>
-            <p>SendIT is a courier service that helps users deliver parcels to different destinations. SendIT
-                provides courier quotes based on weight categories.</p>
-            &nbsp;
-            <h2>CONTACT</h2>
-            <p><img id="contact_images" src="images/call.png" alt=""> 0757877585</p>
-            <p><img id="contact_images" src="images/call.png" alt=""> 0788229573</p>
-            <p><img id="contact_images" src="images/email.png" alt=""> inquiries@sendit.com</p>
-        
-        </div>
+    <div class="right">
+        <div class="LogOut"><a href="index.html">Logout</a></div>
+        <h2 id="text_left">ABOUT</h2> 
+        <p id="text_left">SendIT is a courier service that helps users deliver parcels to different destinations. SendIT
+        provides courier quotes based on weight categories.</p>
+        &nbsp;
+        <h2 id="text_left">CONTACT</h2>
+        <p id="text_left"><img id="contact_images" src="images/call.png" alt=""> 0757877585</p>
+        <p id="text_left"><img id="contact_images" src="images/call.png" alt=""> 0788229573</p>
+        <p id="text_left"><img id="contact_images" src="images/email.png" alt=""> info@sendit.com</p>
+    </div>
+
     </div>
 <div class="footer">Andela Bootcamp Cycle 14 - Anorld Mukone, 2018</div>
 

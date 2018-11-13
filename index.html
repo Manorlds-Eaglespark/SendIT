@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="css/style.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" media="screen" href="css/style.css" />
 <link rel="shortcut icon" href="images/favicon.png" type="image/x-icon">
 <title>SendIt</title>
 </head>
@@ -28,17 +28,16 @@
 <div class="father">
   <div class="sister">
     <p id="theme">New Here? Signup now.</p>
-    <button class="signin" onclick="document.getElementById('id01').style.display='block'" style="width:auto;"><img src="images/new-user.png"
-        alt="logo"> <B>Sign<span id="theme">Up</span></B></button>
+    <button class="signin" onclick="document.getElementById('id03').style.display='block'" style="width:auto;"><img src="images/new-user.png"
+        alt="logo"> <B>Sign-up</B></button>
   </div>
   <div class="brother">
     <p id="theme">Already have an Account?</p>
-    <button class="createAccount" onclick="document.getElementById('id03').style.display='block'" style="width:auto;"><img
-        src="images/login.png" alt="logo"> <B>Log<span id="theme">In</span></B></button>
+    <button class="createAccount" onclick="document.getElementById('id01').style.display='block'" style="width:auto;"><img
+        src="images/login.png" alt="logo"> <B>Log-in</B></button>
   </div>
   <p>&nbsp; .</p>
   <p>&nbsp; .</p>
-  <a href="home.html"> Home Page</a> &nbsp;
   <a href="admin_page.html"> Admin Page</a>
 </div>
 
@@ -47,10 +46,10 @@
 
     <div id="id01" class="modal">
       
-      <form class="modal-content animate" action="/home.html">
+      <form class="modal-content animate" action="home.html">
         <div class="imgcontainer">
           <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
-          <img src="images/new-user2.png" alt="Avatar" class="avatar">
+          <img src="images/login2.png" alt="Avatar" class="avatar">
         </div>
     
         <div class="container">
@@ -60,23 +59,27 @@
           <label for="psw"><b>Password</b></label>
           <input type="password" placeholder="Enter Password" name="psw" required>
             
-          <button type="submit">Login</button>
-          <label>
-            <input type="checkbox" checked="checked" name="remember"> Remember me
-          </label>
-          <label>
-            <span class="psw">Forgot <a href="#">password?</a></span>
-          </label>
+          <button class="login_button" type="submit">LOGIN</button>
+          <div class="father">
+            <div class="sister"><label>
+              <input type="checkbox" checked="checked" name="remember"> Remember me </label>
+            </div>
+            <div class="brother">
+              <label><span class="psw"><a href="#">Forgot password?</a></span></label>
+            </div>
+          </div>
+          
+          
         </div>
       </form>
     </div>
 
     <div id="id03" class="modal">
       
-        <form class="modal-content animate" action="/action_page.php">
+        <form class="modal-content animate" action="home.html">
           <div class="imgcontainer">
             <span onclick="document.getElementById('id03').style.display='none'" class="close" title="Close Modal">&times;</span>
-            <img src="images/login2.png" alt="Avatar" class="avatar">
+            <img src="images/new-user2.png" alt="Avatar" class="avatar">
           </div>
       
           <div class="container">
@@ -88,8 +91,7 @@
 
             <label for="psw"><b>Password</b></label>
             <input type="password" placeholder="Enter Password" name="psw" required>
-              
-            <button type="submit">Submit</button>
+            <button class="register_button" type="submit">REGISTER</button>
             
           </div>
       
@@ -112,14 +114,14 @@
   </div>
 
   <div class="right">
-    <h2>ABOUT</h2> 
-    <p>SendIT is a courier service that helps users deliver parcels to different destinations. SendIT
+    <h2 id="text_left">ABOUT</h2> 
+    <p id="text_left">SendIT is a courier service that helps users deliver parcels to different destinations. SendIT
     provides courier quotes based on weight categories.</p>
    &nbsp;
-  <h2>CONTACT</h2>
-  <p><img id="contact_images" src="images/call.png" alt=""> 0757877585</p>
-  <p><img id="contact_images" src="images/call.png" alt=""> 0788229573</p>
-  <p><img id="contact_images" src="images/email.png" alt=""> inquiries@sendit.com</p>
+  <h2 id="text_left">CONTACT</h2>
+  <p id="text_left"><img id="contact_images" src="images/call.png" alt=""> 0757877585</p>
+  <p id="text_left"><img id="contact_images" src="images/call.png" alt=""> 0788229573</p>
+  <p id="text_left"><img id="contact_images" src="images/email.png" alt=""> info@sendit.com</p>
 
    </div>
 
