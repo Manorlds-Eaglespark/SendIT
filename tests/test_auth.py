@@ -10,7 +10,7 @@ class TestFlaskApi(unittest.TestCase):
         config_name = os.getenv('APP_SETTINGS') # config_name = "development"
         self.app = create_app(config_name).test_client()
 
-        self.userr = {
+        self.user = {
                         "name": "Bob",
                         "email": "bob@gmail.com", 
                         "password": "xxy210"
@@ -60,7 +60,7 @@ class TestFlaskApi(unittest.TestCase):
         
     def test_register_new_user(self):
         """"Test API to create a new user"""
-        response = self.app.post('/v1/auth/register', data= json.dumps(self.userr), content_type='application/json')
+        response = self.app.post('/v1/auth/register', data= json.dumps(self.user), content_type='application/json')
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 201)
         self.assertIn('You registered successfully. Please log in.', data['status message'])

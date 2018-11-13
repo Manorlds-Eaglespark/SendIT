@@ -10,6 +10,6 @@ install:
   
 script:
  #- nosetests --with-coverage --cover-package= ./ 
- - pytest --cov=./ 
+ - pytest --cov=./tests
 after_success:
   - coveralls
