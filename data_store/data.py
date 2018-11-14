@@ -103,6 +103,9 @@ user1 = User(1, "Anorld Mukone", "manorldsapiens@gmail.com", "123456")
 user2 = User(2, "Mukisa Ronald", "r_mukisa@gmail.com", "2018codechef")
 user3 = User(3, "Wakaby Paul", "wp2011@yahoo.com", "thebestintheworld")
 
+admin1 =Admin(4, "Shelton Godwin", "shelton@live.com", "le_admin", True)
+
 
 my_parcels = [parcel1, parcel2, parcel3, parcel4, parcel5, parcel6, parcel7]
 my_users = [user1, user2, user3]
+my_admins = [admin1]
