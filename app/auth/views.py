@@ -23,18 +23,10 @@ class RegistrationView(MethodView):
 
         if not user_exits:
             try:
-                name = request.data['name']
-                if name == "":
-                    return make_response(jsonify({"status message":"Please enter a Name for your account."})), 401
-                email = request.data['email']
-                if not validate_email(email):
-                    return make_response(jsonify({"status message":"Please enter a valid Email."})), 401
-                password = request.data['password']
-                if password == "":
-                    return make_response(jsonify({"status message":"Please enter a Password for your account."})), 401
-
-
-                user = User(len(my_users), name, email, password)
+                if not validate_email(request.data['email']) or request.data['name'] == "" or request.data['password'] == "":
+                    return make_response(jsonify({"status message":"Enter your Name, valid Email, and Password correctly, please try again."})), 401
+                
+                user = User(len(my_users), request.data['name'], request.data['email'], request.data['password'])
                 my_users.append(user)
 
                 response = {
@@ -52,7 +44,7 @@ class RegistrationView(MethodView):
             # There is an existing user. We don't want to register users twice
             # Return a message to the user telling them that they they already exist
             response = {
-                'status message': 'User already exists. Please login.'
+                'status message': 'User with that Email already exists. Please login.'
             }
             return make_response(jsonify(response)), 202
 
@@ -67,11 +59,8 @@ class LoginView(MethodView):
         """Handle POST request for this view. Url ---> /v1/auth/login"""
         user_exits = False
 
-        if request.data['password'] == "":
-            return make_response(jsonify({"status message":"Please enter a valid Password."})), 401
-        
-        if not validate_email(request.data['email']):
-            return make_response(jsonify({"status message":"Please enter a valid Email."})), 401
+        if not validate_email(request.data['email']) or request.data['password'] == "":
+            return make_response(jsonify({"status message":"Please enter a valid Email and correct Password"})), 401
         try:
             # Get the user object using their email (unique to every user)
             user = ""
