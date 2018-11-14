@@ -4,7 +4,7 @@ from . import auth_blueprint
 from flask.views import MethodView
 from flask import make_response, request, jsonify, abort
 from app.models import User
-from data_store.data import my_users
+from data_store.data import my_users, my_admins
 from validate_email import validate_email
 
 
@@ -56,7 +56,7 @@ class LoginView(MethodView):
         try:
             # Get the user object using their email (unique to every user)
             user = ""
-            for userr in my_users:
+            for userr in (my_users+my_admins):
                 if userr.email == request.data['email']:
                     user = userr
                     user_exits = True

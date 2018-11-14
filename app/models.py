@@ -22,7 +22,7 @@ class User:
 		"""
 		return Bcrypt().check_password_hash(self.password, password)
 
-	def generate_token(self, user_id, name):
+	def generate_token(self, user_id, name, email):
 			""" Generates the access token"""
 
 			try:
@@ -30,7 +30,8 @@ class User:
 				payload = {    
 					'exp': datetime.utcnow() + timedelta(minutes=28800),  #Expiry time is 20 days
 					'iat': datetime.utcnow(),
-					'sub': user_id
+					'sub': user_id,
+					'eml': email
 				}
 				# create the byte string token using the payload and the SECRET key
 				jwt_string = jwt.encode(
@@ -43,6 +44,13 @@ class User:
 			except Exception as e:
 				# return an error in string format if an exception occurs
 				return str(e)
+
+	@staticmethod
+	def decode_email(token):
+		"""Decodes the access token from the Authorization header."""
+		# try to decode the token using our SECRET variable
+		payload = jwt.decode(token, str(os.getenv('SECRET')))
+		return payload['eml']
 
 	@staticmethod
 	def decode_token(token):
@@ -69,7 +77,7 @@ class Admin(User):
 
 
 
-class Quote:
+class Quotation:
 	initDict = {
 					"id": 0,
 					"parcel_code":"t____",
@@ -80,8 +88,10 @@ class Quote:
 					"receiver_name":"__",
 					"receiver_contact":"__",
 					"approx_delivery_duration":"__",
+					"prepared_by":"__",
 					"acceptance_status":"_"
-	}
+				}
+
 	def __init__(self, initDict):
 		self.id = initDict["id"]
 		self.parcel_code = initDict["parcel_code"]
@@ -92,19 +102,22 @@ class Quote:
 		self.receiver_name = initDict["receiver_name"]
 		self.receiver_contact = initDict["receiver_contact"]
 		self.approx_delivery_duration = initDict["approx_delivery_duration"]
+		self.prepared_by = initDict["prepared_by"]
 		self.acceptance_status = initDict["acceptance_status"]
 
-    def __str__(self):
-        return {
+
+	def __str__(self):
+		return {
         			"id": self.id,
         			"parcel_code":self.parcel_code,
-        			"price":self.price
+        			"price":self.price,
         			"parcel_items":self.parcel_items,
         			"weight":self.weight,
         			"sender_id":self.sender_id,
         			"receiver_name":self.receiver_name,
         			"receiver_contact":self.receiver_contact,
         			"approx_delivery_duration":self.approx_delivery_duration,
+        			"prepared_by":self.prepared_by,
         			"acceptance_status":self.acceptance_status
     			}
 
@@ -142,7 +155,7 @@ class Parcel:
 
 
 	def __str__(self):
-        return {
+		return {
         			"id": self.id,
         			"code":self.code,
         			"sender_id":self.sender_id,
@@ -154,5 +167,5 @@ class Parcel:
         			"receiver_name":self.receiver_name,
         			"receiver_contact":self.receiver_contact,
         			"size":self.size
-        			}
+    			}
 

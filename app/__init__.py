@@ -42,6 +42,21 @@ def my_item(parcel):
 	        'size':parcel.size 
 	        }
 
+def my_quote(quotation):
+    return {
+            "id": quotation.id,
+            "parcel_code":quotation.parcel_code,
+            "price":quotation.price,
+            "parcel_items":quotation.parcel_items,
+            "weight":quotation.weight,
+            "sender_id":quotation.sender_id,
+            "receiver_name":quotation.receiver_name,
+            "receiver_contact":quotation.receiver_contact,
+            "approx_delivery_duration":quotation.approx_delivery_duration,
+            "prepared_by":quotation.prepared_by,
+            "acceptance_status":quotation.acceptance_status
+    }
+
 def parcel_response(parcel, status):
 	return {
 		"status message":status,
@@ -223,6 +238,78 @@ def create_app(config_name):
                     'message': message
                 }
                 # return an error response, telling the user he is Unauthorized
+                return make_response(jsonify(response)), 401
+
+
+
+
+
+
+
+#***************************************Fetch all and create quotations
+
+    @app.route('/v1/quotations', methods=['POST', 'GET'])
+    def quotations():
+        """fetch all orders or make an order"""
+        # Get the access token from the header
+        auth_header = request.headers.get('Authorization')
+        access_token = auth_header.split(" ")[1][:-1]
+
+        
+        if access_token:
+         # Attempt to decode the token and get the User ID
+            user_id = User.decode_token(access_token)
+            user_email = User.decode_email(access_token)
+
+            if not isinstance(user_id, str):
+                #Go ahead and handle the request, the user is authenticated
+                user = ""
+                for userr in (my_admins + my_users):
+                    if userr.email == user_email
+                        user = userr
+
+                if user.is_admin:
+
+                    if request.method == "POST":
+
+                        if not (request.data['parcel_code']):
+                            return make_response(jsonify({"status message":"A Parcel code is required."})), 400
+
+                        qt_dict= {
+
+                                    "id": len(my_quotations) + 1,
+                                    "parcel_code":request.data["parcel_code"],
+                                    "price":request.data["price"],
+                                    "parcel_items":request.data["parcel_items"],
+                                    "weight":request.data["weight"],
+                                    "sender_id":request.data["sender_id"],
+                                    "receiver_name":request.data["receiver_name"],
+                                    "receiver_contact":request.data["receiver_contact"],
+                                    "approx_delivery_duration":request.data["approx_delivery_duration"],
+                                    "prepared_by":request.data["prepared_by"],
+                                    "acceptance_status":request.data["acceptance_status"]
+                                }
+
+                        quote = Quotation(qt_dict)
+                        my_quotations.append(quote)       
+                        response = jsonify({"status message":"New Quotation Successfully created.", "item":my_quote(quote)})
+                        return make_response(response), 201
+
+                    else:
+                        # GET all the parcels
+                        results = []
+                        for quotation in my_quotations:
+                            results.append(my_quote(quotation))
+                        return soft_return("All Quotations For All Orders", results)
+                        #return make_response(jsonify({"status message":"All Parcel Delivery Orders", "meta": str(len(results))+" items returned","items":results})), 200
+                else:
+                    return make_response(jsonify({"status message":"Only Admins have access to this information."})), 400
+            else:
+                # user is not legit, so the payload is an error message
+                message = user_id
+                response = {
+                    'message': message
+                }
                 return make_response(jsonify(response)), 401
 
 
