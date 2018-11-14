@@ -17,14 +17,15 @@ def parcels_list(my_parcels):
         results.append(parcel)
     return results
 
-
-
 def get_same(my_list, userz_id):
 	lst = []
 	for parcel in my_list:
 		if parcel.sender_id == int(userz_id):
 			lst.append(parcel)
 	return lst
+
+def soft_return(status, results):
+	return make_response(jsonify({"status message": status, "meta": str(len(results)) + " items returned", "items": results})), 200
 
 def my_item(parcel):
 	return {
@@ -99,11 +100,10 @@ def create_app(config_name):
                 else:
                     # GET all the parcels
                     results = []
-
                     for parcel in my_parcels:
                         results.append(my_item(parcel))
-
-                    return make_response(jsonify({"status message":"All Parcel Delivery Orders", "meta": str(len(results))+" items returned","items":results})), 200
+                    return soft_return("All Parcel Delivery Orders", results)
+                    #return make_response(jsonify({"status message":"All Parcel Delivery Orders", "meta": str(len(results))+" items returned","items":results})), 200
             else:
                 # user is not legit, so the payload is an error message
                 message = user_id
@@ -136,7 +136,8 @@ def create_app(config_name):
                         results.append(my_item(parcel))
 
                 if len(results):
-                    return make_response(jsonify({"status message": "Success", "meta": str(len(results)) + " items returned", "items": results})), 200
+                    return soft_return("Success", results)
+                    #return make_response(jsonify({"status message": "Success", "meta": str(len(results)) + " items returned", "items": results})), 200
                 else:
                     return make_response(jsonify({"status message": "Fail- user has no orders or does not exist", "meta": str(len(results)) + " items returned"})), 404
               
