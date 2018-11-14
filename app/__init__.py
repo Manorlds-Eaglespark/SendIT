@@ -39,19 +39,22 @@ def create_app(config_name):
                     if not (request.data['sender_contact']):
                         return make_response(jsonify({"status message":"Please provide all the required details"})), 400
 
-                    id = len(my_parcels) + 1
-                    code = "i"+ str(random.randint(1000, 9999))
-                    sender_id = user_id
-                    status = "Initiated"
-                    pick_up_address = request.data['pick_up_address']
-                    destination = request.data['destination']
-                    description = request.data['description']
-                    sender_contact = request.data['sender_contact']
-                    receiver_name = request.data['receiver_name']
-                    receiver_contact = request.data['receiver_contact']
-                    size = request.data['size']
+                    pcl_dict= {
 
-                    parcel = Parcel(id=id, code=code, sender_id=sender_id, status=status, pick_up_address=pick_up_address, destination=destination, description=description, sender_contact=sender_contact, receiver_name=receiver_name, receiver_contact=receiver_contact, size=size)
+                    "id" : len(my_parcels) + 1,
+                    "code" : "i"+ str(random.randint(1000, 9999)),
+                    "sender_id" : user_id,
+                    "status" : "Initiated by Client",
+                    "pick_up_address" : request.data['pick_up_address'],
+                    "destination" : request.data['destination'],
+                    "description" : request.data['description'],
+                    "sender_contact" : request.data['sender_contact'],
+                    "receiver_name" : request.data['receiver_name'],
+                    "receiver_contact" : request.data['receiver_contact'],
+                    "size" : request.data['size']
+                    }
+
+                    parcel = Parcel(pcl_dict)
                     my_parcels.append(parcel)
 
                     item = {
