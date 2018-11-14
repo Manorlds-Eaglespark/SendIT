@@ -14,11 +14,9 @@ def parcels_list(my_parcels):
 	# GET all the parcels
     results = []
     for parcel in my_parcels:
-        results.append(my_parcel)
+        results.append(parcel)
     return results
 
-def return_answer(status, result):
-	return make_response(jsonify({"status message": status, "meta": str(len(result)) + " items returned", "items": result})), 200
 
 
 def get_same(my_list, userz_id):
@@ -27,12 +25,6 @@ def get_same(my_list, userz_id):
 		if parcel.sender_id == int(userz_id):
 			lst.append(parcel)
 	return lst
-
-def parcel_response(parcel, status):
-	return {
-		"status message":status,
-        "item":my_item(parcel)
-        }
 
 def my_item(parcel):
 	return {
@@ -48,6 +40,12 @@ def my_item(parcel):
 	        'receiver_contact':parcel.receiver_contact,
 	        'size':parcel.size 
 	        }
+
+def parcel_response(parcel, status):
+	return {
+		"status message":status,
+        "item":my_item(parcel)
+        }
 
 def create_app(config_name):
     """Initialize the flask application"""
@@ -100,9 +98,12 @@ def create_app(config_name):
 
                 else:
                     # GET all the parcels
-                    data = parcels_list(my_parcels)
-                    return return_answer("All Parcel Delivery Orders", data)
-                    return make_response(jsonify({"status message":"All Parcel Delivery Orders", "meta": str(len(data))+" items returned","items":data})), 200
+                    results = []
+
+                    for parcel in my_parcels:
+                        results.append(my_item(parcel))
+
+                    return make_response(jsonify({"status message":"All Parcel Delivery Orders", "meta": str(len(results))+" items returned","items":results})), 200
             else:
                 # user is not legit, so the payload is an error message
                 message = user_id
@@ -114,8 +115,9 @@ def create_app(config_name):
 
 #***************************************************************************Fetch all parcel delivery orders by a specific user
 
-    @app.route('/v1/users/<userz_id>/parcels', methods=['GET'])
-    def user_parcels(userz_id, **kwargs):
+    
+    @app.route('/v1/users/<the_user_id>/parcels', methods=['GET'])
+    def user_parcels(the_user_id, **kwargs):
         """Fetch order from one user"""
         # Get the access token from the header
         auth_header = request.headers.get('Authorization')
@@ -127,18 +129,23 @@ def create_app(config_name):
             user_id = User.decode_token(access_token)
             if not isinstance(user_id, str):
                 #Go ahead and handle the request, the user is authenticated
-                parcel_lst = get_same(my_parcels, userz_id)
-                result = parcels_list(parcel_lst)
-                if len(result):
-                	return return_answer("Success" ,result)
+                correct_parcels = get_same(my_parcels, the_user_id)
+                results = []
+
+                for parcel in correct_parcels:
+                        results.append(my_item(parcel))
+
+                if len(results):
+                    return make_response(jsonify({"status message": "Success", "meta": str(len(results)) + " items returned", "items": results})), 200
                 else:
-                    return make_response(jsonify({"status message": "Fail- user has no orders or does not exist", "meta": str(len(result)) + " items returned"})), 404
+                    return make_response(jsonify({"status message": "Fail- user has no orders or does not exist", "meta": str(len(results)) + " items returned"})), 404
               
+
 
 #***************************************************************************Fetch a parcel delivery order
 
     @app.route('/v1/parcels/<int:id>', methods=['GET'])
-    def my_parcel(id, **kwargs):
+    def my_parcel_with_id(id, **kwargs):
         """Fetch a specific parcel with its id"""
         # Get the access token from the header
         auth_header = request.headers.get('Authorization')
