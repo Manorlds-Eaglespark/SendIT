@@ -31,21 +31,21 @@ class TestFlaskApi(unittest.TestCase):
         self.assertEqual(data["status message"], "All Parcel Delivery Orders")
 
     def test_get_specific_delivery_order(self):
-        """"Test API to get all Parcel Delivery Orders"""
+        """"Test API to get a Parcel Delivery Order"""
         response = self.app.get('/v1/parcels/1')#, headers=({"Authorization":"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDE3NjE0MzYsImlhdCI6MTU0MTc0NzAzNiwic3ViIjoxfQ.Giq3gqUSi50ombk7sVmMjgmDZUTCZkJPcMS10fmPfQI"})#{'Content-Type':'application/json',"Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDE3NDU3MzcsImlhdCI6MTU0MTczODUzNywic3ViIjoxLCJuYW0iOiJBbm9ybGQgTXVrb25lIn0.l_-eGIDTrekTjvJ488dBSDUE5AdRdfhtgkQRSJdSy4M"})
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 200)   
 
 
     def test_get_specific_delivery_order_not_there(self):
-        """"Test API to get all Parcel Delivery Orders"""
+        """"Test API to get an order not already made"""
         response = self.app.get('/v1/parcels/100')#, headers=({"Authorization":"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDE3NjE0MzYsImlhdCI6MTU0MTc0NzAzNiwic3ViIjoxfQ.Giq3gqUSi50ombk7sVmMjgmDZUTCZkJPcMS10fmPfQI"})#{'Content-Type':'application/json',"Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDE3NDU3MzcsImlhdCI6MTU0MTczODUzNywic3ViIjoxLCJuYW0iOiJBbm9ybGQgTXVrb25lIn0.l_-eGIDTrekTjvJ488dBSDUE5AdRdfhtgkQRSJdSy4M"})
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 404)
 
 
     def test_create_new_delivery_order(self):
-        """"Test API to create a new user"""
+        """"Test API to create new order"""
         response = self.app.post('/v1/parcels', data= json.dumps(self.parcel), content_type='application/json')
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 201)
@@ -53,7 +53,7 @@ class TestFlaskApi(unittest.TestCase):
 
 
     def test_cancel_a_delivery_order(self):
-        """"Test API to create a new user"""
+        """"Test API to cancel a delivery order"""
         response = self.app.put('/v1/parcels/2/cancel')
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 202)
@@ -61,14 +61,14 @@ class TestFlaskApi(unittest.TestCase):
 
 
     def test_get_delivery_orders_for_a_specific_user(self):
-        """"Test API to create a new user"""
+        """"Test API to get orders for a user"""
         response = self.app.get('/v1/users/2/parcels')
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
         self.assertIn('Success', data['status message'])
 
     def test_get_delivery_orders_for_a_specific_user_not_registered(self):
-        """"Test API to create a new user"""
+        """"Test API to get orders for a user not registered"""
         response = self.app.get('/v1/users/200/parcels')
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 404)
