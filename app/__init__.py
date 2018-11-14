@@ -14,20 +14,7 @@ def parcels_list(my_parcels):
 	# GET all the parcels
     results = []
     for parcel in my_parcels:
-        obj = {
-                'id': parcel.id,
-                'code': parcel.code,
-                'sender_id':parcel.sender_id,
-                'status':parcel.status,
-                'pick_up_address': parcel.pick_up_address,
-                'destination': parcel.destination,
-                'description': parcel.description,
-                'sender_contact': parcel.sender_contact,
-                'receiver_name': parcel.receiver_name,
-                'receiver_contact':parcel.receiver_contact,
-                'size':parcel.size
-        }
-        results.append(obj)
+        results.append(my_parcel)
     return results
 
 def return_answer(status, result):

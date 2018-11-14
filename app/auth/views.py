@@ -24,8 +24,8 @@ class RegistrationView(MethodView):
                 if not validate_email(request.data['email']) or request.data['name'] == "" or request.data['password'] == "":
                     return make_response(jsonify({"status message":"Enter your Name, valid Email, and Password correctly, please try again."})), 401
                 
-                user = User(len(my_users), request.data['name'], request.data['email'], request.data['password'])
-                my_users.append(user)
+                new_user = User(len(my_users), request.data['name'], request.data['email'], request.data['password'])
+                my_users.append(new_user)
 
                 response = {
                         'status message': 'You registered successfully. Please log in.'
