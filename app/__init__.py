@@ -30,6 +30,10 @@ def parcels_list(my_parcels):
         results.append(obj)
     return results
 
+def return_answer(status, result):
+	return make_response(jsonify({"status message": status, "meta": str(len(result)) + " items returned", "items": result})), 200
+
+
 def get_same(my_list, userz_id):
 	lst = []
 	for parcel in my_list:
@@ -40,20 +44,23 @@ def get_same(my_list, userz_id):
 def parcel_response(parcel, status):
 	return {
 		"status message":status,
-        "item":{
-            'id': parcel.id,
-            'code': parcel.code,
-            'sender_id':parcel.sender_id,
-            'status':parcel.status,
-            'pick_up_address': parcel.pick_up_address,
-            'destination': parcel.destination,
-            'description': parcel.description,
-            'sender_contact': parcel.sender_contact,
-            'receiver_name': parcel.receiver_name,
-            'receiver_contact':parcel.receiver_contact,
-            'size':parcel.size
-    		}
+        "item":my_item(parcel)
         }
+
+def my_item(parcel):
+	return {
+			'id': parcel.id,
+	        'code': parcel.code,
+	        'sender_id':parcel.sender_id,
+	        'status':parcel.status,
+	        'pick_up_address': parcel.pick_up_address,
+	        'destination': parcel.destination,
+	        'description': parcel.description,
+	        'sender_contact': parcel.sender_contact,
+	        'receiver_name': parcel.receiver_name,
+	        'receiver_contact':parcel.receiver_contact,
+	        'size':parcel.size 
+	        }
 
 def create_app(config_name):
     """Initialize the flask application"""
@@ -99,29 +106,15 @@ def create_app(config_name):
                     }
 
                     parcel = Parcel(pcl_dict)
-                    my_parcels.append(parcel)
-
-                    item = {
-                  
-                    'id': parcel.id,
-                    'code': parcel.code,
-                    'sender_id':parcel.sender_id,
-                    'status':parcel.status,
-                    'pick_up_address': parcel.pick_up_address,
-                    'destination': parcel.destination,
-                    'description': parcel.description,
-                    'sender_contact': parcel.sender_contact,
-                    'receiver_name': parcel.receiver_name,
-                    'receiver_contact':parcel.receiver_contact,
-                    'size':parcel.size 
-                    }
-                    response = jsonify({"status message":"New Delivery Order Successfully Added.", "item":item})
+                    my_parcels.append(parcel)       
+                    response = jsonify({"status message":"New Delivery Order Successfully Added.", "item":my_item(parcel)})
 
                     return make_response(response), 201
 
                 else:
                     # GET all the parcels
                     data = parcels_list(my_parcels)
+                    return return_answer("All Parcel Delivery Orders", data)
                     return make_response(jsonify({"status message":"All Parcel Delivery Orders", "meta": str(len(data))+" items returned","items":data})), 200
             else:
                 # user is not legit, so the payload is an error message
@@ -150,7 +143,7 @@ def create_app(config_name):
                 parcel_lst = get_same(my_parcels, userz_id)
                 result = parcels_list(parcel_lst)
                 if len(result):
-                    return make_response(jsonify({"status message": "Success", "meta": str(len(result)) + " items returned", "items": result})), 200
+                	return return_answer("Success" ,result)
                 else:
                     return make_response(jsonify({"status message": "Fail- user has no orders or does not exist", "meta": str(len(result)) + " items returned"})), 404
               
