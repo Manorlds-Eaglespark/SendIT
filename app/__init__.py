@@ -37,6 +37,23 @@ def get_same(my_list, userz_id):
 			lst.append(parcel)
 	return lst
 
+def parcel_response(parcel, status):
+	return {
+		"status message":status,
+        "item":{
+            'id': parcel.id,
+            'code': parcel.code,
+            'sender_id':parcel.sender_id,
+            'status':parcel.status,
+            'pick_up_address': parcel.pick_up_address,
+            'destination': parcel.destination,
+            'description': parcel.description,
+            'sender_contact': parcel.sender_contact,
+            'receiver_name': parcel.receiver_name,
+            'receiver_contact':parcel.receiver_contact,
+            'size':parcel.size
+    		}
+        }
 
 def create_app(config_name):
     """Initialize the flask application"""
@@ -164,26 +181,7 @@ def create_app(config_name):
 
                 if not isinstance(parcel, str):                    
                     if request.method == "GET":
-            
-                        # Handle GET request, sending back the post to the user
-                        response = {
-                                    "status":"Success, item found",
-                                    "item":{
-                                        'id': parcel.id,
-                                        'code': parcel.code,
-                                        'sender_id':parcel.sender_id,
-                                        'status':parcel.status,
-                                        'pick_up_address': parcel.pick_up_address,
-                                        'destination': parcel.destination,
-                                        'description': parcel.description,
-                                        'sender_contact': parcel.sender_contact,
-                                        'receiver_name': parcel.receiver_name,
-                                        'receiver_contact':parcel.receiver_contact,
-                                        'size':parcel.size
-
-                                    }
-                                    }
-                        return make_response(jsonify(response)), 200
+                        return make_response(jsonify(parcel_response(parcel, "Success, item found"))), 200
 
                 else:
                     return make_response(jsonify({"message":"Sorry, Parcel not found!"})), 404
@@ -226,27 +224,7 @@ def create_app(config_name):
 
                     if request.method == "PUT":
                         parcel.status = "Cancelled by Client"
-                        my_parcels[parcel.id] = parcel
-            
-                        # Handle GET request, sending back the post to the user
-                        response = {
-                                    "status message":"Item Successfully Cancelled.",
-                                    "item":{
-                                            'id': parcel.id,
-                                            'code': parcel.code,
-                                            'sender_id':parcel.sender_id,
-                                            'status':parcel.status,
-                                            'pick_up_address': parcel.pick_up_address,
-                                            'destination': parcel.destination,
-                                            'description': parcel.description,
-                                            'sender_contact': parcel.sender_contact,
-                                            'receiver_name': parcel.receiver_name,
-                                            'receiver_contact':parcel.receiver_contact,
-                                            'size':parcel.size
-
-                                            }
-                                        }
-                        return make_response(jsonify(response)), 202
+                        return make_response(jsonify(parcel_response(my_parcels[parcel.id], 'Item Successfully Cancelled'))), 202
 
                 else:
                     return make_response(jsonify({"message":"Sorry, Parcel not found!"})), 404
