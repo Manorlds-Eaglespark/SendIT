@@ -1,5 +1,7 @@
 [report]
 omit =
   */python?.?/*
-  */app/__init__.py
+  */app/*
+  */instance/*
+  *data_store/*
   */run.py
