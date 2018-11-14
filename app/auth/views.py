@@ -15,12 +15,10 @@ class RegistrationView(MethodView):
         """Handle POST request for this view. Url ---> /v1/auth/register"""
         user_exits = False
         # Query to see if the user already exists
-
         for userr in my_users:
             if userr.email == request.data['email']:
                 user_exits = True
                 break
-
         if not user_exits:
             try:
                 if not validate_email(request.data['email']) or request.data['name'] == "" or request.data['password'] == "":
@@ -48,34 +46,24 @@ class RegistrationView(MethodView):
             }
             return make_response(jsonify(response)), 202
 
-
-
-
-
 class LoginView(MethodView):
     """This class-based view handles user login and access token generation."""
-
     def post(self):
         """Handle POST request for this view. Url ---> /v1/auth/login"""
         user_exits = False
-
         if not validate_email(request.data['email']) or request.data['password'] == "":
             return make_response(jsonify({"status message":"Please enter a valid Email and correct Password"})), 401
         try:
             # Get the user object using their email (unique to every user)
             user = ""
-
             for userr in my_users:
                 if userr.email == request.data['email']:
                     user = userr
                     user_exits = True
                     break
-
             if user_exits:
                 # Try to authenticate the found user using their password
-
                 if user and user.password_is_valid(request.data['password']):
-
                     # Generate the access token. This will be used as the authorization header
                     access_token = user.generate_token(user.id, user.name)
                     if access_token:

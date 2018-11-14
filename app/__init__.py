@@ -10,6 +10,33 @@ from data_store.data import my_parcels, my_users
 # local import
 from instance.config import app_config
 
+def parcels_list(my_parcels):
+	# GET all the parcels
+    results = []
+    for parcel in my_parcels:
+        obj = {
+                'id': parcel.id,
+                'code': parcel.code,
+                'sender_id':parcel.sender_id,
+                'status':parcel.status,
+                'pick_up_address': parcel.pick_up_address,
+                'destination': parcel.destination,
+                'description': parcel.description,
+                'sender_contact': parcel.sender_contact,
+                'receiver_name': parcel.receiver_name,
+                'receiver_contact':parcel.receiver_contact,
+                'size':parcel.size
+        }
+        results.append(obj)
+    return results
+
+def get_same(my_list, userz_id):
+	lst = []
+	for parcel in my_list:
+		if parcel.sender_id == int(userz_id):
+			lst.append(parcel)
+	return lst
+
 
 def create_app(config_name):
     """Initialize the flask application"""
@@ -77,25 +104,8 @@ def create_app(config_name):
 
                 else:
                     # GET all the parcels
-                    results = []
-
-                    for parcel in my_parcels:
-                        obj = {
-                                'id': parcel.id,
-                                'code': parcel.code,
-                                'sender_id':parcel.sender_id,
-                                'status':parcel.status,
-                                'pick_up_address': parcel.pick_up_address,
-                                'destination': parcel.destination,
-                                'description': parcel.description,
-                                'sender_contact': parcel.sender_contact,
-                                'receiver_name': parcel.receiver_name,
-                                'receiver_contact':parcel.receiver_contact,
-                                'size':parcel.size
-                        }
-                        results.append(obj)
-
-                    return make_response(jsonify({"status message":"All Parcel Delivery Orders", "meta": str(len(results))+" items returned","items":results})), 200
+                    data = parcels_list(my_parcels)
+                    return make_response(jsonify({"status message":"All Parcel Delivery Orders", "meta": str(len(data))+" items returned","items":data})), 200
             else:
                 # user is not legit, so the payload is an error message
                 message = user_id
@@ -120,28 +130,12 @@ def create_app(config_name):
             user_id = User.decode_token(access_token)
             if not isinstance(user_id, str):
                 #Go ahead and handle the request, the user is authenticated
-                results = []
-
-                for parcel in my_parcels:
-                    if parcel.sender_id == int(userz_id):
-                        obj = {
-                                'id': parcel.id,
-                                'code': parcel.code,
-                                'sender_id':parcel.sender_id,
-                                'status':parcel.status,
-                                'pick_up_address': parcel.pick_up_address,
-                                'destination': parcel.destination,
-                                'description': parcel.description,
-                                'sender_contact': parcel.sender_contact,
-                                'receiver_name': parcel.receiver_name,
-                                'receiver_contact':parcel.receiver_contact,
-                                'size':parcel.size
-                        }
-                        results.append(obj)
-                if len(results):
-                    return make_response(jsonify({"status message": "Success", "meta": str(len(results)) + " items returned", "items": results})), 200
+                parcel_lst = get_same(my_parcels, userz_id)
+                result = parcels_list(parcel_lst)
+                if len(result):
+                    return make_response(jsonify({"status message": "Success", "meta": str(len(result)) + " items returned", "items": result})), 200
                 else:
-                    return make_response(jsonify({"status message": "Fail- user has no orders or does not exist", "meta": str(len(results)) + " items returned"})), 404
+                    return make_response(jsonify({"status message": "Fail- user has no orders or does not exist", "meta": str(len(result)) + " items returned"})), 404
               
 
 #***************************************************************************Fetch a parcel delivery order
