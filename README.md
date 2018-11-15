@@ -37,6 +37,27 @@ api: This is where the API is taking shape that will power the whole application
 
 api_business: This is the develop branch of the api.
 
+# Heroku API Endpoints
+- GET v1/parcels       - Fetch all parcel delivery orders -> Admin
+
+- GET v1/parcels/<parcelId>       - Fetch a specific parcel delivery order -> User
+	
+- GET v1/users/<userId>/parcels       - Fetch all parcel delivery orders by a specific user -> User
+	
+- PUT v1/parcels/<parcelId>/cancel       - Cancel the specific parcel delivery order -> User
+	
+- POST v1/parcels       - Create a parcel delivery order -> User
+
+- POST v1/quotations      - Create a quotation for a client -> Admin
+
+- GET v1/quotations       - Fetch all quotations -> Admin
+
+- GET v1/quotations/<quoteId>       - Fetch a single quote -> User
+	
+- GET v1/users/<userId>/quotations       - Fetch quotes for a specific user -> User
+	
+- PUT v1/quotations/<userId>/user      - A clients accepts a quote from Admin  -> User
+
 
 # Language
 The application API is built on Python Flask micro api framework, hosted on Heroku. The UI is HTML, CSS and Javascript only.
