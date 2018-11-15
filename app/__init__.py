@@ -234,6 +234,7 @@ def create_app(config_name):
                     if prcl.id == id:
                         parcel = prcl
                         break
+                    
                 else:
                     parcel = "Not there"
 
@@ -241,7 +242,17 @@ def create_app(config_name):
 
                     if request.method == "PUT":
                         parcel.status = "Cancelled by Client"
-                        return make_response(jsonify(parcel_response(my_parcels[parcel.id], 'Item Successfully Cancelled'))), 202
+
+                    for i in range (len(my_parcels)):
+                        if my_parcels[i].code==parcel.code:
+                            my_parcels[i]=parcel
+                        
+                        # for prcl in my_parcels:
+                        #     if prcl.id == parcel.id:
+                        #         prcl = parcel
+                            
+                        # my_parcels[i-1] = parcel
+                        return make_response(jsonify(parcel_response(parcel, 'Item Successfully Cancelled'))), 202
 
                 else:
                     return make_response(jsonify({"message":"Sorry, Parcel not found!"})), 404
@@ -301,7 +312,7 @@ def create_app(config_name):
                                     "receiver_name":request.data["receiver_name"],
                                     "receiver_contact":request.data["receiver_contact"],
                                     "approx_delivery_duration":request.data["approx_delivery_duration"],
-                                    "prepared_by":request.data["prepared_by"],
+                                    "prepared_by":user_id,
                                     "acceptance_status":request.data["acceptance_status"]
                                 }
 

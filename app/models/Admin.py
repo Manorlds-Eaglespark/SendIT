@@ -1,4 +1,5 @@
 # app/models/Admin.py
+from app.models.User import User
 
 class Admin(User):
 	"""This class defines an Admin for the SendIt platform"""

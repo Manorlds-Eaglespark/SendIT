@@ -15,17 +15,27 @@ class RegistrationView(MethodView):
         """Handle POST request for this view. Url ---> /v1/auth/register"""
         user_exits = False
         # Query to see if the user already exists
-        for userr in my_users:
+
+        for userr in (my_users+my_admins):
             if userr.email == request.data['email']:
                 user_exits = True
                 break
+
         if not user_exits:
             try:
-                if not validate_email(request.data['email']) or request.data['name'] == "" or request.data['password'] == "":
-                    return make_response(jsonify({"status message":"Enter your Name, valid Email, and Password correctly, please try again."})), 401
-                
-                new_user = User(len(my_users), request.data['name'], request.data['email'], request.data['password'])
-                my_users.append(new_user)
+                name = request.data['name']
+                if name == "":
+                    return make_response(jsonify({"status message":"Please enter a Name for your account."})), 401
+                email = request.data['email']
+                if not validate_email(email):
+                    return make_response(jsonify({"status message":"Please enter a valid Email."})), 401
+                password = request.data['password']
+                if password == "":
+                    return make_response(jsonify({"status message":"Please enter a Password for your account."})), 401
+
+
+                user = User((len(my_users)+1), name, email, password)
+                my_users.append(user)
 
                 response = {
                         'status message': 'You registered successfully. Please log in.'
@@ -42,28 +52,41 @@ class RegistrationView(MethodView):
             # There is an existing user. We don't want to register users twice
             # Return a message to the user telling them that they they already exist
             response = {
-                'status message': 'User with that Email already exists. Please login.'
+                'status message': 'User already exists. Please login.'
             }
             return make_response(jsonify(response)), 202
 
+
+
+
+
 class LoginView(MethodView):
     """This class-based view handles user login and access token generation."""
+
     def post(self):
         """Handle POST request for this view. Url ---> /v1/auth/login"""
         user_exits = False
-        if not validate_email(request.data['email']) or request.data['password'] == "":
-            return make_response(jsonify({"status message":"Please enter a valid Email and correct Password"})), 401
+
+        if request.data['password'] == "":
+            return make_response(jsonify({"status message":"Please enter a valid Password."})), 401
+        
+        if not validate_email(request.data['email']):
+            return make_response(jsonify({"status message":"Please enter a valid Email."})), 401
         try:
             # Get the user object using their email (unique to every user)
             user = ""
-            for userr in (my_users+my_admins):
+
+            for userr in my_users+my_admins:
                 if userr.email == request.data['email']:
                     user = userr
                     user_exits = True
                     break
+
             if user_exits:
                 # Try to authenticate the found user using their password
+
                 if user and user.password_is_valid(request.data['password']):
+
                     # Generate the access token. This will be used as the authorization header
                     access_token = user.generate_token(user.id, user.name, user.email)
                     if access_token:
@@ -72,6 +95,7 @@ class LoginView(MethodView):
                             'access_token':  access_token.decode()
                         }
                         return make_response(jsonify(response)), 200
+                
                 else:
                     # User does not exist. Therefore, we return an error message
                     response = {
@@ -79,6 +103,13 @@ class LoginView(MethodView):
                     }
                     return make_response(jsonify(response)), 401
 
+            else:
+                # User does not exist. Therefore, we return an error message
+                response = {
+                    'status message': 'Enter correct credentials, and then try again'
+                }
+                return make_response(jsonify(response)), 401
+            
         except Exception as e:
             # Create a response containing an string error message
             response = {

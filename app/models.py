@@ -1,4 +1,5 @@
-# app/models/User.py
+
+# app/models.py
 import os
 from flask_bcrypt import Bcrypt
 import jwt
@@ -21,16 +22,15 @@ class User:
 		"""
 		return Bcrypt().check_password_hash(self.password, password)
 
-	def generate_token(self, user_id, name, email):
+	def generate_token(self, user_id, name):
 			""" Generates the access token"""
 
 			try:
 				# set up a payload with an expiration time
 				payload = {
-					'exp': datetime.utcnow() + timedelta(minutes=43200),
+					'exp': datetime.utcnow() + timedelta(minutes=240),
 					'iat': datetime.utcnow(),
-					'sub': user_id,
-					'eml': email
+					'sub': user_id
 				}
 				# create the byte string token using the payload and the SECRET key
 				jwt_string = jwt.encode(
@@ -43,12 +43,7 @@ class User:
 			except Exception as e:
 				# return an error in string format if an exception occurs
 				return str(e)
-	@staticmethod
-	def decode_email(token):
-		"""Decodes the email from the Authorization header."""
-		payload = jwt.decode( token, str(os.getenv('SECRET')), algorithms='HS256')
-		return payload['eml']
-		
+
 	@staticmethod
 	def decode_token(token):
 		"""Decodes the access token from the Authorization header."""
@@ -62,3 +57,29 @@ class User:
 		except jwt.InvalidTokenError:
 			# the token is invalid, return an error string
 			return "Invalid token. Please register or login"
+
+
+
+
+class Parcel:
+	"""This class defines the Orders."""
+
+	def __init__(self, id, code, sender_id, status,  pick_up_address, destination, description, sender_contact, receiver_name, receiver_contact, size):
+		"""Initialize the post."""
+		self.id = id
+		self.code = code
+		self.sender_id = sender_id
+		self.status = status
+		self.pick_up_address = pick_up_address
+		self.destination = destination
+		self.description = description
+		self.sender_contact = sender_contact
+		self.receiver_name = receiver_name
+		self.receiver_contact = receiver_contact
+		self.size = size
+
+
+	def __repr__(self):
+		"""Return a representation of a post instance."""
+		return "<Parcel: {}>".format(self.code)
+
