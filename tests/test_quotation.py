@@ -38,7 +38,6 @@ class TestFlaskApi(unittest.TestCase):
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 201)
         self.assertIn('New Quotation Successfully created.', data['status message'])
-    
 
         
 if __name__ == "__main__":

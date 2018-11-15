@@ -6,6 +6,7 @@ from flask import make_response, request, jsonify, abort
 from app.models.User import User
 from data_store.data import my_users, my_admins
 from validate_email import validate_email
+import re
 
 
 class RegistrationView(MethodView):
@@ -29,9 +30,18 @@ class RegistrationView(MethodView):
                 email = request.data['email']
                 if not validate_email(email):
                     return make_response(jsonify({"status message":"Please enter a valid Email."})), 401
+
                 password = request.data['password']
-                if password == "":
-                    return make_response(jsonify({"status message":"Please enter a Password for your account."})), 401
+                if len(password) < 8:
+                    return make_response(jsonify({"status message":"Make sure your password is at lest 8 letters"})), 401
+                elif re.search('[0-9]',password) is None:
+                    return make_response(jsonify({"status message":"Make sure your password has a number in it"})), 401
+                elif re.search('[A-Z]',password) is None: 
+                    return make_response(jsonify({"status message":"Make sure your password has a capital letter in it"})), 401
+
+                # password = request.data['password']
+                # if password == "":
+                #     return make_response(jsonify({"status message":"Please enter a Password for your account."})), 401
 
 
                 user = User((len(my_users)+1), name, email, password)

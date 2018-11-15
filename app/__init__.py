@@ -102,8 +102,16 @@ def create_app(config_name):
 
                 if request.method == "POST":
 
-                    if not (request.data['sender_contact']):
-                        return make_response(jsonify({"status message":"Please provide all the required details"})), 400
+                    pick_up_address = request.data['pick_up_address'], 
+                    destination = request.data['destination']
+                    description = request.data['description']
+                    sender_contact = request.data['sender_contact']
+                    receiver_name = request.data['receiver_name']
+                    receiver_contact = request.data['receiver_contact']
+                    size = request.data['size']
+
+                    if not pick_up_address or not destination or not description or not sender_contact or not receiver_name or not receiver_contact or not size:
+                        return make_response(jsonify({"status message":"Please avail all the required details, and try again"})), 400
 
                     pcl_dict= {
 

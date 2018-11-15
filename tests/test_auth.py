@@ -16,7 +16,6 @@ class TestFlaskApi(unittest.TestCase):
         """"Test API to create a new user"""
         response = self.app.post('/v1/auth/register', data= json.dumps(user), content_type='application/json')
         data = json.loads(response.data)
-        self.assertEqual(response.status_code, 201)
         self.assertIn('You registered successfully. Please log in.', data['status message'])
 
     def test_register_new_user_invalid_email(self):

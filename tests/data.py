@@ -2,7 +2,7 @@
 user = {
             "name": "Bob",
             "email": "bob@gmail.com", 
-            "password": "xxy210"
+            "password": "xxy210Avxzcvcx"
         }
 
 user_invalid_email = {
@@ -42,15 +42,15 @@ user_login_details_invalid_email = {
                         }
 
 quotation = {
-                    "parcel_code":"i2531",
-                    "price":"25000 UGX",
-                    "parcel_items":"2 Bunches of Matooke",
-                    "weight":"15 Kg",
-                    "sender_id":2,
-                    "receiver_name":"Anorld Mukone",
-                    "receiver_contact":"0788229573",
-                    "approx_delivery_duration":"3 Hours",
-                    "acceptance_status":"Pending"
+                "parcel_code":"i2531",
+                "price":"25000 UGX",
+                "parcel_items":"2 Bunches of Matooke",
+                "weight":"15 Kg",
+                "sender_id":2,
+                "receiver_name":"Anorld Mukone",
+                "receiver_contact":"0788229573",
+                "approx_delivery_duration":"3 Hours",
+                "acceptance_status":"Pending"
             }
 
 parcel = {
@@ -60,6 +60,19 @@ parcel = {
             "receiver_contact": "0705622625",
             "receiver_name": "Ian Kendrick",
             "sender_contact": "0757877585",
+            "size": "Small Parcel: Documents, Envelope items. less than 20KGs",
+            "status": "Initiated by Client"
+        }
+
+
+
+parcel2 = {
+            "description": "Need 4 speed cd",
+            "destination": "Banda stage, Jinja road",
+            "pick_up_address": "Ssebagala stage, Kisasi",
+            "receiver_contact": "0705622625",
+            "receiver_name": "",
+            "sender_contact": "075787755",
             "size": "Small Parcel: Documents, Envelope items. less than 20KGs",
             "status": "Initiated by Client"
         }
