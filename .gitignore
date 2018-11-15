@@ -14,3 +14,6 @@ tests/__pycache__/__init__.cpython-37.pyc
 tests/__pycache__/test_auth.cpython-37-PYTEST.pyc
 tests/__pycache__/test_parcel_orders.cpython-37-PYTEST.pyc
 tests/.coverage
+/models/__pycache__/
+models/__pycache__/
+

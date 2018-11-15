@@ -3,7 +3,7 @@
 from . import auth_blueprint
 from flask.views import MethodView
 from flask import make_response, request, jsonify, abort
-from app.models import User
+from app.models.User import User
 from data_store.data import my_users, my_admins
 from validate_email import validate_email
 
@@ -65,7 +65,7 @@ class LoginView(MethodView):
                 # Try to authenticate the found user using their password
                 if user and user.password_is_valid(request.data['password']):
                     # Generate the access token. This will be used as the authorization header
-                    access_token = user.generate_token(user.id, user.name)
+                    access_token = user.generate_token(user.id, user.name, user.email)
                     if access_token:
                         response = {
                             'status message': 'You logged in successfully.',
