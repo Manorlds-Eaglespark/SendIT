@@ -3,9 +3,6 @@
 import os
 import uuid
 import random
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 from flask_api import FlaskAPI
 from flask import request, jsonify, make_response, abort
 from app.models.User import User
@@ -138,30 +135,6 @@ def create_app(config_name):
                     "receiver_contact" : request.data['receiver_contact'],
                     "size" : request.data['size']
                     }
-
-
-                    message = """
-
-                                <h1 style="color:#e40046">Message: Login Now To View This <a href="#">Order</a></h1>
-                                <h2 style="color:#0f97d0">SendIT Messenger.</h2>
-                                <h2>SendIT is a courier service that helps users deliver parcels to different destinations. SendIT provides courier quotes based on weight categories.</h2>
-                                """
-
-                    from_adres = 'manorlds.eaglespark@gmail.com'
-                    to_adres = 'manorldsapiens@gmail.com'
-
-                    my_mailer = MIMEMultipart('alternatief')
-                    my_mailer['Subject'] = "New SendIt Delivery Order Request."
-                    my_mailer['From'] = from_adres
-                    my_mailer['To'] = to_adres
-                    boodskap = MIMEText(message, 'html')
-                    my_mailer.attach(boodskap)
-                    mail = smtplib.SMTP('smtp.gmail.com',587)
-                    mail.ehlo()
-                    mail.starttls()
-                    mail.login('manorlds.eaglespark@gmail.com','manorldsapiens2018')
-                    mail.sendmail('manorlds.eaglespark@gmail.com','manorldsapiens@gmail.com',my_mailer.as_string())
-                    mail.close()
 
                     parcel = Parcel(pcl_dict)
                     my_parcels.append(parcel)
