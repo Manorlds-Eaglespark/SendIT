@@ -17,7 +17,7 @@ class RegistrationView(MethodView):
 
         name = request.data['name']
 
-        if not re.match("^[a-z]*$", name) or len(name) < 3:
+        if not isinstance(name, str) or len(name) < 3:
             return make_response(jsonify({"status message":"Name: - Enter only leters. More than 3 characters."})), 401
 
         email = request.data['email']
