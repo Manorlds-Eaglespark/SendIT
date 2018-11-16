@@ -1,10 +1,9 @@
 # app/models/Quotation.py
-
+import uuid
 
 
 class Quotation:
 	initDict = {
-					"id": 0,
 					"parcel_code":"t____",
 					"price":"____ UGX",
 					"parcel_items":"__",
@@ -18,7 +17,7 @@ class Quotation:
 				}
 
 	def __init__(self, initDict):
-		self.id = initDict["id"]
+		self.id = uuid.uuid4
 		self.parcel_code = initDict["parcel_code"]
 		self.price = initDict["price"]
 		self.parcel_items = initDict["parcel_items"]

@@ -5,7 +5,6 @@ class Admin(User):
 	"""This class defines an Admin for the SendIt platform"""
 
 	initDict={
-				"id":0,
 				"name":"_",
 				"email":"_",
 				"password":"dfsa",
@@ -14,7 +13,7 @@ class Admin(User):
 
 	def __init__(self, initDict):
 		"""Initialize the user with an email and a password."""
-		super().__init__(initDict['id'], initDict['name'], initDict['email'], initDict['password'])
+		super().__init__(initDict['name'], initDict['email'], initDict['password'])
 		self.is_admin = True
 
 

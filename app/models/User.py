@@ -1,5 +1,6 @@
 # app/models/User.py
 import os
+import uuid
 from flask_bcrypt import Bcrypt
 import jwt
 from datetime import datetime, timedelta
@@ -8,9 +9,9 @@ from datetime import datetime, timedelta
 class User:
 	"""This class defines the user model """
 
-	def __init__(self, id, name, email, password):
+	def __init__(self, name, email, password):
 		"""Initialize the user with an email and a password."""
-		self.id = id
+		self.id = uuid.uuid4
 		self.name = name
 		self.email = email
 		self.password = Bcrypt().generate_password_hash(password).decode()

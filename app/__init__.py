@@ -1,6 +1,7 @@
 # app/__init__.py
 """File that has the routes for the api """
 import os
+import uuid
 import random
 import smtplib
 from email.mime.multipart import MIMEMultipart
@@ -125,7 +126,7 @@ def create_app(config_name):
 
                     pcl_dict= {
 
-                    "id" : len(my_parcels) + 1,
+                    "id" : uuid.uuid4,
                     "code" : "i"+ str(random.randint(1000, 9999)),
                     "sender_id" : user_id,
                     "status" : "Initiated by Client",
@@ -338,7 +339,7 @@ def create_app(config_name):
 
                         qt_dict= {
 
-                                    "id": len(my_quotations) + 1,
+                                    "id": uuid.uuid4,
                                     "parcel_code":request.data["parcel_code"],
                                     "price":request.data["price"],
                                     "parcel_items":request.data["parcel_items"],
@@ -475,7 +476,7 @@ def create_app(config_name):
                                 parcel = prcl
                                 break
                         else:
-                            parcel = "Not there"
+                            parcel = "Not there"\
 
                         if not isinstance(parcel, str):
                             if request.method == "PUT":

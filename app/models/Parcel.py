@@ -1,10 +1,11 @@
 # app/models/Parcel.py
+import uuid
 
 
 class Parcel:
 	"""This class defines the Orders."""
 
-	initDict = {"id":0,
+	initDict = {
 				"code":"t2584",
 				"sender_id":0,
 				"status":"__",
@@ -18,7 +19,7 @@ class Parcel:
 
 	def __init__(self, initDict):
 		"""Initialize the post."""
-		self.id = initDict["id"]
+		self.id = uuid.uuid4
 		self.code = initDict["code"]
 		self.sender_id = initDict["sender_id"]
 		self.status = initDict["status"]
