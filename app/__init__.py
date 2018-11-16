@@ -2,6 +2,9 @@
 """File that has the routes for the api """
 import os
 import random
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from flask_api import FlaskAPI
 from flask import request, jsonify, make_response, abort
 from app.models.User import User
@@ -14,7 +17,9 @@ from instance.config import app_config
 def get_access_token():
     """Get the access token from the header"""
     auth_header = request.headers.get('Authorization')
-    access_token = auth_header.split(" ")[1][:-1]
+    if not auth_header:
+        return make_response(jsonify({"status message": "You have to login first."}))
+    access_token = str(auth_header).split(" ")[1][:-1]
     return access_token
 
 
@@ -133,9 +138,38 @@ def create_app(config_name):
                     "size" : request.data['size']
                     }
 
+
+                    message = """
+
+                                <h1 style="color:#e40046">Message: Login Now To View This <a href="#">Order</a></h1>
+                                <h2 style="color:#0f97d0">SendIT Messenger.</h2>
+                                <h2>SendIT is a courier service that helps users deliver parcels to different destinations. SendIT provides courier quotes based on weight categories.</h2>
+                                """
+
+                    from_adres = 'manorlds.eaglespark@gmail.com'
+                    to_adres = 'manorldsapiens@gmail.com'
+
+                    my_mailer = MIMEMultipart('alternatief')
+                    my_mailer['Subject'] = "New SendIt Delivery Order Request."
+                    my_mailer['From'] = from_adres
+                    my_mailer['To'] = to_adres
+                    boodskap = MIMEText(message, 'html')
+                    my_mailer.attach(boodskap)
+                    mail = smtplib.SMTP('smtp.gmail.com',587)
+                    mail.ehlo()
+                    mail.starttls()
+                    mail.login('manorlds.eaglespark@gmail.com','manorldsapiens2018')
+                    mail.sendmail('manorlds.eaglespark@gmail.com','manorldsapiens@gmail.com',my_mailer.as_string())
+                    mail.close()
+
                     parcel = Parcel(pcl_dict)
-                    my_parcels.append(parcel)       
-                    response = jsonify({"status message":"New Delivery Order Successfully Added.", "item":my_item(parcel)})
+                    my_parcels.append(parcel)
+
+                    # smtpObj = smtplib.SMTP('smtp.gmail.com', 587)
+                    # smtpObj.sendmail('anorld@funadeal.com', 'manorldsapiens@gmail.com', message)
+                    # smtpObj.quit()
+                  
+                    response = jsonify({"status message":"New Delivery Order Successfully Added. Email sent to Admin.", "item":my_item(parcel)})
 
                     return make_response(response), 201
 
@@ -323,12 +357,14 @@ def create_app(config_name):
                         return make_response(response), 201
 
                     else:
-                        # GET all the parcels
+                        # GET all the quotations
                         results = []
-                        for quotation in my_quotations:
-                            results.append(my_quote(quotation))
-                        return soft_return("All Quotations For All Orders", results)
-                        #return make_response(jsonify({"status message":"All Parcel Delivery Orders", "meta": str(len(results))+" items returned","items":results})), 200
+                        if len(my_quotations)>0:
+                            for quotation in my_quotations:
+                                results.append(my_quote(quotation))
+                            return soft_return("All Quotations For All Orders", results)
+                        else:
+                            return make_response(jsonify({"status message":"No Quotations made yet"})), 400
                 else:
                     return make_response(jsonify({"status message":"Only Admins have access to this information."})), 400
             else:
@@ -403,7 +439,7 @@ def create_app(config_name):
                         results.append(my_quote(quote))
 
                 if len(results):
-                    return soft_return("Success", results)
+                    return soft_return("Accept this Quote to Activate Delivery", results)
                     #return make_response(jsonify({"status message": "Success", "meta": str(len(results)) + " items returned", "items": results})), 200
                 else:
                     return make_response(jsonify({"status message": "Fail- user has no orders or does not exist", "meta": str(len(results)) + " items returned"})), 404
@@ -444,7 +480,17 @@ def create_app(config_name):
                         if not isinstance(parcel, str):
                             if request.method == "PUT":
                                 user_quote.acceptance_status = "Accepted by user"
-                                return make_response(jsonify(parcel_response(my_parcels[parcel.id], 'Item Successfully Cancelled'))), 202
+                                parcel.status = "Active"
+
+                                for i in range (len(my_quotations)):
+                                    if my_quotations[i].parcel_code==user_quote.parcel_code:
+                                        my_quotations[i]=user_quote
+
+                                for j in range (len(my_parcels)):
+                                    if my_parcels[j].code==parcel.code:
+                                        my_parcels[j]=parcel
+
+                                return make_response(jsonify(parcel_response(user_quote, 'Your Delivery is now Active'))), 202
                         else:
                             return make_response(jsonify({"status message":"Parcel for quotation not found."})), 404
                     else:
