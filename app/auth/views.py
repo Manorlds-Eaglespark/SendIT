@@ -14,6 +14,24 @@ class RegistrationView(MethodView):
 
     def post(self):
         """Handle POST request for this view. Url ---> /v1/auth/register"""
+
+        name = request.data['name']
+        if name == "":
+            return make_response(jsonify({"status message":"Please enter a Name for your account."})), 401
+        email = request.data['email']
+        
+        if not re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", email) != None:
+            return make_response(jsonify({"status message":"Please enter a valid Email."})), 401
+
+        password = request.data['password']
+        if len(password) < 8:
+            return make_response(jsonify({"status message":"Make sure your password is at lest 8 letters"})), 401
+        elif re.search('[0-9]',password) is None:
+            return make_response(jsonify({"status message":"Make sure your password has a number in it"})), 401
+        elif re.search('[A-Z]',password) is None: 
+            return make_response(jsonify({"status message":"Make sure your password has a capital letter in it"})), 401
+
+
         user_exits = False
         # Query to see if the user already exists
 
@@ -24,21 +42,7 @@ class RegistrationView(MethodView):
 
         if not user_exits:
             try:
-                name = request.data['name']
-                if name == "":
-                    return make_response(jsonify({"status message":"Please enter a Name for your account."})), 401
-                email = request.data['email']
-                if not validate_email(email):
-                    return make_response(jsonify({"status message":"Please enter a valid Email."})), 401
-
-                password = request.data['password']
-                if len(password) < 8:
-                    return make_response(jsonify({"status message":"Make sure your password is at lest 8 letters"})), 401
-                elif re.search('[0-9]',password) is None:
-                    return make_response(jsonify({"status message":"Make sure your password has a number in it"})), 401
-                elif re.search('[A-Z]',password) is None: 
-                    return make_response(jsonify({"status message":"Make sure your password has a capital letter in it"})), 401
-
+                
                 # password = request.data['password']
                 # if password == "":
                 #     return make_response(jsonify({"status message":"Please enter a Password for your account."})), 401
