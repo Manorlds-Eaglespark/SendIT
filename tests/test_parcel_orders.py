@@ -20,12 +20,6 @@ class TestFlaskApi(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data["status message"], "All Parcel Delivery Orders")
 
-    def test_get_specific_delivery_order(self):
-        """"Test API to get a Parcel Delivery Order"""
-        response = self.app.get('/v1/parcels/1')#, headers=({"Authorization":"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDE3NjE0MzYsImlhdCI6MTU0MTc0NzAzNiwic3ViIjoxfQ.Giq3gqUSi50ombk7sVmMjgmDZUTCZkJPcMS10fmPfQI"})#{'Content-Type':'application/json',"Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDE3NDU3MzcsImlhdCI6MTU0MTczODUzNywic3ViIjoxLCJuYW0iOiJBbm9ybGQgTXVrb25lIn0.l_-eGIDTrekTjvJ488dBSDUE5AdRdfhtgkQRSJdSy4M"})
-        data = json.loads(response.data)
-        self.assertEqual(response.status_code, 200)   
-
 
     def test_get_specific_delivery_order_not_there(self):
         """"Test API to get an order not already made"""

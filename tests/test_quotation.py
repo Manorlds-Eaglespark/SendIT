@@ -19,11 +19,6 @@ class TestFlaskApi(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data["status message"], "All Quotations For All Orders")
 
-    def test_get_specific_quotation(self):
-        """"Test API to get a Parcel Delivery Order"""
-        response = self.app.get('/v1/quotations/1')
-        data = json.loads(response.data)
-        self.assertEqual(response.status_code, 200) 
 
     def test_get_specific_quotation_not_there(self):
         """"Test API to get a quotation not already made"""
