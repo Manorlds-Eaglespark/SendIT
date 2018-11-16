@@ -17,7 +17,7 @@ class Quotation:
 				}
 
 	def __init__(self, initDict):
-		self.id = uuid.uuid4
+		self.id = int(uuid.uuid4().clock_seq)
 		self.parcel_code = initDict["parcel_code"]
 		self.price = initDict["price"]
 		self.parcel_items = initDict["parcel_items"]

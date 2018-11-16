@@ -6,7 +6,7 @@ class Parcel:
 	"""This class defines the Orders."""
 
 	initDict = {
-				"code":"t2584",
+				"code":"",
 				"sender_id":0,
 				"status":"__",
 				"pick_up_address":"_",
@@ -19,7 +19,7 @@ class Parcel:
 
 	def __init__(self, initDict):
 		"""Initialize the post."""
-		self.id = uuid.uuid4
+		self.id = int(uuid.uuid4().clock_seq)
 		self.code = initDict["code"]
 		self.sender_id = initDict["sender_id"]
 		self.status = initDict["status"]

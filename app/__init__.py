@@ -122,8 +122,6 @@ def create_app(config_name):
                         return make_response(jsonify({"status message":"Please avail all the required details, and try again"})), 400
 
                     pcl_dict= {
-
-                    "id" : uuid.uuid4,
                     "code" : "i"+ str(random.randint(1000, 9999)),
                     "sender_id" : user_id,
                     "status" : "Initiated by Client",
@@ -311,8 +309,6 @@ def create_app(config_name):
                             return make_response(jsonify({"status message":"A Parcel code is required."})), 400
 
                         qt_dict= {
-
-                                    "id": uuid.uuid4,
                                     "parcel_code":request.data["parcel_code"],
                                     "price":request.data["price"],
                                     "parcel_items":request.data["parcel_items"],

@@ -44,7 +44,7 @@ class RegistrationView(MethodView):
                 #     return make_response(jsonify({"status message":"Please enter a Password for your account."})), 401
 
 
-                user = User((len(my_users)+1), name, email, password)
+                user = User(name, email, password)
                 my_users.append(user)
 
                 response = {
