@@ -8,9 +8,15 @@ from app.models.User import User
 from app.models.Parcel import Parcel
 from app.models.Quotation import Quotation
 from data_store.data import my_parcels, my_users, my_admins, my_quotations
-
 # local import
 from instance.config import app_config
+
+def get_access_token():
+    """Get the access token from the header"""
+    auth_header = request.headers.get('Authorization')
+    access_token = auth_header.split(" ")[1][:-1]
+    return access_token
+
 
 def parcels_list(my_parcels):
 	# GET all the parcels
@@ -88,10 +94,9 @@ def create_app(config_name):
     @app.route('/v1/parcels', methods=['POST', 'GET'])
     def parcels():
         """fetch all orders or make an order"""
-        # Get the access token from the header
-        auth_header = request.headers.get('Authorization')
-        access_token = auth_header.split(" ")[1][:-1]
 
+
+        access_token = get_access_token()
         
         if access_token:
          # Attempt to decode the token and get the User ID
@@ -156,11 +161,8 @@ def create_app(config_name):
     @app.route('/v1/users/<the_user_id>/parcels', methods=['GET'])
     def user_parcels(the_user_id, **kwargs):
         """Fetch order from one user"""
-        # Get the access token from the header
-        auth_header = request.headers.get('Authorization')
-        access_token = auth_header.split(" ")[1][:-1]
 
-        
+        access_token = get_access_token()
         if access_token:
          # Attempt to decode the token and get the User ID
             user_id = User.decode_token(access_token)
@@ -185,11 +187,8 @@ def create_app(config_name):
     @app.route('/v1/parcels/<int:id>', methods=['GET'])
     def my_parcel_with_id(id, **kwargs):
         """Fetch a specific parcel with its id"""
-        # Get the access token from the header
-        auth_header = request.headers.get('Authorization')
-        access_token = auth_header.split(" ")[1][:-1]
-
         
+        access_token = get_access_token()
         if access_token:
          # Attempt to decode the token and get the User ID
             user_id = User.decode_token(access_token)
@@ -226,11 +225,8 @@ def create_app(config_name):
     @app.route('/v1/parcels/<int:id>/cancel', methods=['PUT'])
     def cancel_my_parcel(id, **kwargs):
         """Change the status of an order to canceled"""
-        # Get the access token from the header
-        auth_header = request.headers.get('Authorization')
-        access_token = auth_header.split(" ")[1][:-1]
 
-        
+        access_token = get_access_token()
         if access_token:
          # Attempt to decode the token and get the User ID
             user_id = User.decode_token(access_token)
@@ -283,12 +279,9 @@ def create_app(config_name):
 
     @app.route('/v1/quotations', methods=['POST', 'GET'])
     def quotations():
-        """fetch all orders or make an order"""
-        # Get the access token from the header
-        auth_header = request.headers.get('Authorization')
-        access_token = auth_header.split(" ")[1][:-1]
+        """fetch all quotations or make an one"""
 
-        
+        access_token = get_access_token()
         if access_token:
          # Attempt to decode the token and get the User ID
             user_id = User.decode_token(access_token)
@@ -351,12 +344,9 @@ def create_app(config_name):
 
     @app.route('/v1/quotations/<int:id>', methods=['GET'])
     def my_quotation_with_id(id, **kwargs):
-        """Fetch a specific parcel with its id"""
-        # Get the access token from the header
-        auth_header = request.headers.get('Authorization')
-        access_token = auth_header.split(" ")[1][:-1]
-
+        """Fetch a specific quotation with its id"""
         
+        access_token = get_access_token()
         if access_token:
          # Attempt to decode the token and get the User ID
             user_id = User.decode_token(access_token)
@@ -398,12 +388,9 @@ def create_app(config_name):
     
     @app.route('/v1/users/<the_user_id>/quotations', methods=['GET'])
     def user_quotations(the_user_id, **kwargs):
-        """Fetch order from one user"""
-        # Get the access token from the header
-        auth_header = request.headers.get('Authorization')
-        access_token = auth_header.split(" ")[1][:-1]
+        """Fetch quotations for one user"""
 
-        
+        access_token = get_access_token()        
         if access_token:
          # Attempt to decode the token and get the User ID
             user_id = User.decode_token(access_token)
@@ -427,11 +414,9 @@ def create_app(config_name):
 
     @app.route('/v1/quotations/<int:id>/user', methods=['PUT'])
     def accept_parcel_quotation(id, **kwargs):
-        """Change the status of an order to canceled"""
-        # Get the access token from the header
-        auth_header = request.headers.get('Authorization')
-        access_token = auth_header.split(" ")[1][:-1]
+        """Change the status of an quotation to canceled"""
 
+        access_token = get_access_token()
         
         if access_token:
          # Attempt to decode the token and get the User ID
