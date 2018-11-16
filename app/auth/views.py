@@ -16,8 +16,10 @@ class RegistrationView(MethodView):
         """Handle POST request for this view. Url ---> /v1/auth/register"""
 
         name = request.data['name']
-        if name == "":
-            return make_response(jsonify({"status message":"Please enter a Name for your account."})), 401
+
+        if not re.match("^[a-z]*$", name) or len(name) < 3:
+            return make_response(jsonify({"status message":"Name: - Enter only leters. More than 3 characters."})), 401
+
         email = request.data['email']
         
         if not re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", email) != None:
