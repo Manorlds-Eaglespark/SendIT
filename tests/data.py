@@ -1,12 +1,12 @@
 
 user = {
-            "name": "Bob",
+            "name": "Bobre",
             "email": "bob@gmail.com", 
             "password": "xxy210Avxzcvcx"
         }
 
 user_invalid_email = {
-                        "name": "Bob",
+                        "name": "Bobre",
                         "email": "__lll652", 
                         "password": "xxy210"
                      }
