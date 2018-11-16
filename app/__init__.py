@@ -115,7 +115,7 @@ def create_app(config_name):
                     receiver_contact = request.data['receiver_contact']
                     size = request.data['size']
 
-                    if not pick_up_address or not destination or not description or not sender_contact or not receiver_name or not receiver_contact or not size:
+                    if not (pick_up_address and destination and description and sender_contact and receiver_name and receiver_contact and size):
                         return make_response(jsonify({"status message":"Please avail all the required details, and try again"})), 400
 
                     pcl_dict= {
