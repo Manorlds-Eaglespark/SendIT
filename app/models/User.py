@@ -1,0 +1,95 @@
+# app/models/User.py
+from app import db
+import os
+import uuid
+from flask_bcrypt import Bcrypt
+import jwt
+from datetime import datetime, timedelta
+
+
+
+class User(db.Model):
+	"""This class defines the user model """
+
+	__tablename__ = 'users'
+
+	# Define the columns of the users table, starting with the primary key
+	id = db.Column(db.Integer, primary_key=True)
+	name = db.Column(db.String(256), nullable=False)
+	email = db.Column(db.String(256), nullable=False, unique=True)
+	password = db.Column(db.String(256), nullable=False)
+	date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
+	date_modified = db.Column( db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
+	parcels = db.relationship('Parcel', order_by='Parcel.id', cascade="all, delete-orphan")
+	#quotations = db.relationship('Quotation', order_by='Quotation.id', cascade="all, delete-orphan")
+	
+
+	def __init__(self, name, email, password):
+		"""Initialize the user with an email and a password."""
+		self.id = int(uuid.uuid4().clock_seq)
+		self.name = name
+		self.email = email
+		self.password = Bcrypt().generate_password_hash(password).decode()
+
+
+	def save(self):
+		"""Save a user to the database.
+		This includes creating a new user and editing one.
+		"""
+		db.session.add(self)
+		db.session.commit()
+
+
+	def delete(self):
+		"""Deletes a given user."""
+		db.session.delete(self)
+		db.session.commit()
+
+
+	def password_is_valid(self, password):
+		"""
+		Checks the password against it's hash to validates the user's password
+		"""
+		return Bcrypt().check_password_hash(self.password, password)
+
+	def generate_token(self, user_id, email):
+			""" Generates the access token"""
+
+			try:
+				# set up a payload with an expiration time
+				payload = {
+					'exp': datetime.utcnow() + timedelta(minutes=43200),
+					'iat': datetime.utcnow(),
+					'sub': user_id,
+					'eml': email
+				}
+				# create the byte string token using the payload and the SECRET key
+				jwt_string = jwt.encode(
+					payload,
+					str(os.getenv('SECRET')),
+					algorithm='HS256'
+				)
+				return jwt_string
+
+			except Exception as e:
+				# return an error in string format if an exception occurs
+				return str(e)
+	@staticmethod
+	def decode_email(token):
+		"""Decodes the email from the Authorization header."""
+		payload = jwt.decode( token, str(os.getenv('SECRET')), algorithms='HS256')
+		return payload['eml']
+		
+	@staticmethod
+	def decode_token(token):
+		"""Decodes the access token from the Authorization header."""
+		try:
+			# try to decode the token using our SECRET variable
+			payload = jwt.decode( token, str(os.getenv('SECRET')), algorithms='HS256')
+			return payload['sub']
+		except jwt.ExpiredSignatureError:
+			# the token is expired, return an error string
+			return "Expired token. Please login to get a new token"
+		except jwt.InvalidTokenError:
+			# the token is invalid, return an error string
+			return "Invalid token. Please register or login"

@@ -1,0 +1,6 @@
+venv/
+app/__pycache__/
+instance/__pycache__/
+migrations/
+app/models/__pycache__/
+app/auth/__pycache__/
