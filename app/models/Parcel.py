@@ -1,29 +1,9 @@
 # app/models/Parcel.py
 import uuid
-from app import db
 from app.models.User import User
 
 
-class Parcel(db.Model):
-	"""This class defines the Parcels."""
-
-	__tablename__ = 'parcels'
-
-
-	# Define the columns of the users table, starting with the primary key
-	id = db.Column(db.Integer, primary_key=True)
-	sender_id = db.Column(db.Integer, db.ForeignKey(User.id), nullable=False)
-	status = db.Column(db.String(256), nullable=False)
-	pick_up_address = db.Column(db.String(256), nullable=False)
-	destination = db.Column(db.String(256), nullable=False)
-	description = db.Column(db.String(256), nullable=False)
-	sender_contact = db.Column(db.String(256), nullable=False)
-	receiver_name = db.Column(db.String(256), nullable=False)
-	receiver_contact = db.Column(db.String(256), nullable=False)
-	size = db.Column(db.String(256), nullable=False)
-	date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
-	date_modified = db.Column( db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
-
+class Parcel():
 	initDict = {
 				"sender_id":0,
 				"status":"__",
@@ -62,20 +42,3 @@ class Parcel(db.Model):
         			"receiver_contact":self.receiver_contact,
         			"size":self.size
     			}
-
-	def save(self):
-		db.session.add(self)
-		db.session.commit()
-
-
-	def delete(self):
-		"""Deletes a given parcel."""
-		db.session.delete(self)
-		db.session.commit()
-
-
-	@staticmethod
-	def get_all_by_user(user_id):
-		"""This method gets all the parcels for a given user."""
-		return Parcel.query.filter_by(sender_id=user_id)
-

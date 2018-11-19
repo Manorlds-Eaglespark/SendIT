@@ -7,8 +7,6 @@ class Config(object):
     DEBUG = False
     CSRF_ENABLED = True
     SECRET = os.getenv('SECRET')
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
-
 
 POSTGRES = {
     'user': 'postgres',
@@ -21,15 +19,12 @@ POSTGRES = {
 
 class DevelopmentConfig(Config):
     """Configurations for Development."""
-    SQLALCHEMY_DATABASE_URI = 'postgresql://%(user)s:\
-%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
     DEBUG = True
     use_reloader=True
 
 class TestingConfig(Config):
     """Configurations for Testing, with a separate test database."""
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/send_it'
     DEBUG = True
 
 class StagingConfig(Config):

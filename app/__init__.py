@@ -1,16 +1,10 @@
 # app/__init__.py
-
-from flask_api import FlaskAPI
-from flask_sqlalchemy import SQLAlchemy
 from flask import request, jsonify, make_response, abort
 
 import os
 
 # local import
 from instance.config import app_config
-
-# initialize sql-alchemy
-db = SQLAlchemy()
 
 
 def create_app(config_name):
@@ -23,7 +17,6 @@ def create_app(config_name):
     app = FlaskAPI(__name__, instance_relative_config=True)
     app.config.from_object(app_config['development'])
     app.config.from_pyfile('config.py')
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
 
     def get_access_token():
@@ -77,7 +70,7 @@ def create_app(config_name):
                     }
 
                     parcel = Parcel(pcl_dict)
-                    parcel.save()
+                    ####save parcel here
                     parcel_item = {
                         'id': parcel.id,
                         'sender_id':parcel.sender_id,
@@ -96,7 +89,7 @@ def create_app(config_name):
 
                 else:
                     # GET all the parcels
-                    parcels = Parcel.query.all()
+                    parcels = #get parcels from database
                     results = []
 
                     for parcel in parcels:
@@ -137,7 +130,7 @@ def create_app(config_name):
             user_id = User.decode_token(access_token)
             if not isinstance(user_id, str):
                 #Go ahead and handle the request, the user is authenticated
-                parcels = Parcel.get_all_by_user(user_id)
+                parcels = #get parcels for one user from database
                 results = []
 
                 for parcel in parcels:
@@ -178,7 +171,7 @@ def create_app(config_name):
 
                 if request.method == "GET":
 
-                    parcel = Parcel.query.filter_by(id=id).first()
+                    parcel = #get the parcel from the database
 
                     if not parcel:
                         return make_response(jsonify({"message":"Sorry, Parcel not found!"})), 404 
@@ -222,7 +215,7 @@ def create_app(config_name):
                 #Go ahead and handle the request, the user is authenticated
 
                 if request.method == "PUT":
-                    parcel = Parcel.query.filter_by(id=id).first()
+                    parcel = #get the parcel to update
                     if not parcel:
                         return make_response(jsonify({"message":"Parcel not found!"})), 404
                     else:

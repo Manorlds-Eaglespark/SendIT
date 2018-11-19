@@ -1,5 +1,4 @@
 # app/models/User.py
-from app import db
 import os
 import uuid
 from flask_bcrypt import Bcrypt
@@ -8,21 +7,7 @@ from datetime import datetime, timedelta
 
 
 
-class User(db.Model):
-	"""This class defines the user model """
-
-	__tablename__ = 'users'
-
-	# Define the columns of the users table, starting with the primary key
-	id = db.Column(db.Integer, primary_key=True)
-	name = db.Column(db.String(256), nullable=False)
-	email = db.Column(db.String(256), nullable=False, unique=True)
-	password = db.Column(db.String(256), nullable=False)
-	date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
-	date_modified = db.Column( db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
-	parcels = db.relationship('Parcel', order_by='Parcel.id', cascade="all, delete-orphan")
-	#quotations = db.relationship('Quotation', order_by='Quotation.id', cascade="all, delete-orphan")
-	
+class User():
 
 	def __init__(self, name, email, password):
 		"""Initialize the user with an email and a password."""
@@ -30,20 +15,6 @@ class User(db.Model):
 		self.name = name
 		self.email = email
 		self.password = Bcrypt().generate_password_hash(password).decode()
-
-
-	def save(self):
-		"""Save a user to the database.
-		This includes creating a new user and editing one.
-		"""
-		db.session.add(self)
-		db.session.commit()
-
-
-	def delete(self):
-		"""Deletes a given user."""
-		db.session.delete(self)
-		db.session.commit()
 
 
 	def password_is_valid(self, password):

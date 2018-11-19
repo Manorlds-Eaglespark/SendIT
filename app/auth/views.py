@@ -43,7 +43,7 @@ class RegistrationView(MethodView):
                 email = post_data['email']
                 password = post_data['password']
                 user = User(name=name, email=email, password=password)
-                user.save()
+                ##save this user
 
 
                 response = {
@@ -87,7 +87,7 @@ class LoginView(MethodView):
 
         try:
             # Get the user object using their email (unique to every user)
-            user = User.query.filter_by(email=email).first()
+            user = ##get user
             # Try to authenticate the found user using their password
             if user and user.password_is_valid(password):
                 # Generate the access token. This will be used as the authorization header
