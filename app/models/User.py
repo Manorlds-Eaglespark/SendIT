@@ -11,7 +11,6 @@ class User():
 
 	def __init__(self, name, email, password):
 		"""Initialize the user with an email and a password."""
-		self.id = int(uuid.uuid4().clock_seq)
 		self.name = name
 		self.email = email
 		self.password = Bcrypt().generate_password_hash(password).decode()

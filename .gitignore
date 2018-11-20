@@ -4,3 +4,6 @@ instance/__pycache__/
 migrations/
 app/models/__pycache__/
 app/auth/__pycache__/
+.idea/
+app/database/__pycache__/
+

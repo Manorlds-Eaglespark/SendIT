@@ -1,11 +1,12 @@
 # app/__init__.py
-from flask import request, jsonify, make_response, abort
-
+from flask import Flask, request, jsonify, make_response, abort
+from app.database.Database import Database
 import os
 
 # local import
 from instance.config import app_config
 
+database = Database()
 
 def create_app(config_name):
 
@@ -14,7 +15,8 @@ def create_app(config_name):
     from app.models.User import User
 
 
-    app = FlaskAPI(__name__, instance_relative_config=True)
+
+    app = Flask(__name__, instance_relative_config=True)
     app.config.from_object(app_config['development'])
     app.config.from_pyfile('config.py')
 
@@ -69,6 +71,7 @@ def create_app(config_name):
                     }
 
                     parcel = Parcel(pcl_dict)
+                    database.save_parcel(parcel)
                     ####save parcel here
                     parcel_item = {
                         'id': parcel.id,
@@ -88,7 +91,7 @@ def create_app(config_name):
 
                 else:
                     # GET all the parcels
-                    parcels = #get parcels from database
+                    parcels = database.get_all_parcels() #get parcels from database
                     results = []
 
                     for parcel in parcels:
@@ -129,7 +132,7 @@ def create_app(config_name):
             user_id = User.decode_token(access_token)
             if not isinstance(user_id, str):
                 #Go ahead and handle the request, the user is authenticated
-                parcels = #get parcels for one user from database
+                parcels = get_parcels_for_one_user()#get parcels for one user from database
                 results = []
 
                 for parcel in parcels:
@@ -170,7 +173,7 @@ def create_app(config_name):
 
                 if request.method == "GET":
 
-                    parcel = #get the parcel from the database
+                    parcel = database.get_one_parcel() #get the parcel from the database
 
                     if not parcel:
                         return make_response(jsonify({"message":"Sorry, Parcel not found!"})), 404 
@@ -214,25 +217,25 @@ def create_app(config_name):
                 #Go ahead and handle the request, the user is authenticated
 
                 if request.method == "PUT":
-                    parcel = #get the parcel to update
+                    parcel = get_one_parcel(id)
                     if not parcel:
                         return make_response(jsonify({"message":"Parcel not found!"})), 404
                     else:
-                            parcel.status = "Cancelled"
-                            parcel.save()
-                            parcel_item = {
-                            'id': parcel.id,
-                            'sender_id':parcel.sender_id,
-                            'status':parcel.status,
-                            'pick_up_address': parcel.pick_up_address,
-                            'destination': parcel.destination,
-                            'description': parcel.description,
-                            'sender_contact': parcel.sender_contact,
-                            'receiver_name': parcel.receiver_name,
-                            'receiver_contact':parcel.receiver_contact,
-                            'size':parcel.size 
-                            }
-                            return make_response(jsonify(parcel_item)), 202
+                        database.change_status_of_parcel_cancel_delivery(id)
+                           
+                        parcel_item = {
+                        'id': parcel.id,
+                        'sender_id':parcel.sender_id,
+                        'status':parcel.status,
+                        'pick_up_address': parcel.pick_up_address,
+                        'destination': parcel.destination,
+                        'description': parcel.description,
+                        'sender_contact': parcel.sender_contact,
+                        'receiver_name': parcel.receiver_name,
+                        'receiver_contact':parcel.receiver_contact,
+                        'size':parcel.size 
+                        }
+                        return make_response(jsonify(parcel_item)), 202
 
             else:
                 # user is not legit, so the payload is an error message
