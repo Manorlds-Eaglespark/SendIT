@@ -1,5 +1,8 @@
 # SendIT   
-[![Build Status](https://travis-ci.org/Manorlds-Eaglespark/SendIT.svg?branch=api)](https://travis-ci.org/Manorlds-Eaglespark/SendIT)   [![Coverage Status](https://coveralls.io/repos/github/Manorlds-Eaglespark/SendIT/badge.svg?branch=api)](https://coveralls.io/github/Manorlds-Eaglespark/SendIT?branch=api)  
+[![Build Status](https://travis-ci.org/Manorlds-Eaglespark/SendIT.svg?branch=api)](https://travis-ci.org/Manorlds-Eaglespark/SendIT)  
+
+[![Coverage Status](https://coveralls.io/repos/github/Manorlds-Eaglespark/SendIT/badge.svg?branch=api)](https://coveralls.io/github/Manorlds-Eaglespark/SendIT?branch=api)
+
 <a href="https://codeclimate.com/github/Manorlds-Eaglespark/SendIT/maintainability"><img src="https://api.codeclimate.com/v1/badges/6e809a652b8b095e970b/maintainability" /></a>
 
 SendIT is a courier service that helps users deliver parcels to different destinations. SendIT provides courier quotes based on weight categories. 
