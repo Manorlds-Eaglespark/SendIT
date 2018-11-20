@@ -72,9 +72,8 @@ def create_app(config_name):
 
                     parcel = Parcel(pcl_dict)
                     database.save_parcel(parcel)
-                    ####save parcel here
+
                     parcel_item = {
-                        'id': parcel.id,
                         'sender_id':parcel.sender_id,
                         'status':parcel.status,
                         'pick_up_address': parcel.pick_up_address,
@@ -96,16 +95,16 @@ def create_app(config_name):
 
                     for parcel in parcels:
                         obj = {
-                        'id': parcel.id,
-                        'sender_id':parcel.sender_id,
-                        'status':parcel.status,
-                        'pick_up_address': parcel.pick_up_address,
-                        'destination': parcel.destination,
-                        'description': parcel.description,
-                        'sender_contact': parcel.sender_contact,
-                        'receiver_name': parcel.receiver_name,
-                        'receiver_contact':parcel.receiver_contact,
-                        'size':parcel.size 
+                        'id': parcel[0],
+                        'sender_id':parcel[1],
+                        'status':parcel[2],
+                        'pick_up_address': parcel[3],
+                        'destination': parcel[4],
+                        'description': parcel[5],
+                        'sender_contact': parcel[6],
+                        'receiver_name': parcel[7],
+                        'receiver_contact':parcel[8],
+                        'size':parcel[9]
                         }
                         results.append(obj)
 
@@ -132,21 +131,21 @@ def create_app(config_name):
             user_id = User.decode_token(access_token)
             if not isinstance(user_id, str):
                 #Go ahead and handle the request, the user is authenticated
-                parcels = get_parcels_for_one_user()#get parcels for one user from database
+                parcels = database.get_parcels_for_one_user(the_user_id)#get parcels for one user from database
                 results = []
 
                 for parcel in parcels:
                         obj = {
-                        'id': parcel.id,
-                        'sender_id':parcel.sender_id,
-                        'status':parcel.status,
-                        'pick_up_address': parcel.pick_up_address,
-                        'destination': parcel.destination,
-                        'description': parcel.description,
-                        'sender_contact': parcel.sender_contact,
-                        'receiver_name': parcel.receiver_name,
-                        'receiver_contact':parcel.receiver_contact,
-                        'size':parcel.size 
+                        'id': parcel[0],
+                        'sender_id':parcel[2],
+                        'status':parcel[3],
+                        'pick_up_address': parcel[4],
+                        'destination': parcel[5],
+                        'description': parcel[6],
+                        'sender_contact': parcel[7],
+                        'receiver_name': parcel[8],
+                        'receiver_contact':parcel[9],
+                        'size':parcel[10]
                         }
                         results.append(obj)
 
@@ -173,22 +172,22 @@ def create_app(config_name):
 
                 if request.method == "GET":
 
-                    parcel = database.get_one_parcel() #get the parcel from the database
+                    parcel = database.get_one_parcel(id) #get the parcel from the database
 
                     if not parcel:
                         return make_response(jsonify({"message":"Sorry, Parcel not found!"})), 404 
                     else:                  
                             parcel_item = {
-                            'id': parcel.id,
-                            'sender_id':parcel.sender_id,
-                            'status':parcel.status,
-                            'pick_up_address': parcel.pick_up_address,
-                            'destination': parcel.destination,
-                            'description': parcel.description,
-                            'sender_contact': parcel.sender_contact,
-                            'receiver_name': parcel.receiver_name,
-                            'receiver_contact':parcel.receiver_contact,
-                            'size':parcel.size 
+                            'id': parcel[0],
+                            'sender_id':parcel[1],
+                            'status':parcel[2],
+                            'pick_up_address': parcel[3],
+                            'destination': parcel[4],
+                            'description': parcel[5],
+                            'sender_contact': parcel[6],
+                            'receiver_name': parcel[7],
+                            'receiver_contact':parcel[8],
+                            'size':parcel[9]
                             }
                             return make_response(jsonify(parcel_item)), 200
                         
@@ -217,23 +216,23 @@ def create_app(config_name):
                 #Go ahead and handle the request, the user is authenticated
 
                 if request.method == "PUT":
-                    parcel = get_one_parcel(id)
+                    parcel = database.get_one_parcel(id)
                     if not parcel:
                         return make_response(jsonify({"message":"Parcel not found!"})), 404
                     else:
                         database.change_status_of_parcel_cancel_delivery(id)
                            
                         parcel_item = {
-                        'id': parcel.id,
-                        'sender_id':parcel.sender_id,
-                        'status':parcel.status,
-                        'pick_up_address': parcel.pick_up_address,
-                        'destination': parcel.destination,
-                        'description': parcel.description,
-                        'sender_contact': parcel.sender_contact,
-                        'receiver_name': parcel.receiver_name,
-                        'receiver_contact':parcel.receiver_contact,
-                        'size':parcel.size 
+                        'id': parcel[0],
+                        'sender_id':parcel[1],
+                        'status':parcel[2],
+                        'pick_up_address': parcel[3],
+                        'destination': parcel[4],
+                        'description': parcel[5],
+                        'sender_contact': parcel[6],
+                        'receiver_name': parcel[7],
+                        'receiver_contact':parcel[8],
+                        'size':parcel[9]
                         }
                         return make_response(jsonify(parcel_item)), 202
 

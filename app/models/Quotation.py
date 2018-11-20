@@ -1,5 +1,6 @@
 # app/models/Quotation.py
-import uuid
+
+from datetime import datetime, timedelta
 
 class Quotation():
 

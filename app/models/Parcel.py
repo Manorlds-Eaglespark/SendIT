@@ -1,10 +1,9 @@
 # app/models/Parcel.py
-import uuid
-from app.models.User import User
 
+from datetime import datetime, timedelta
 
-class Parcel():
-	initDict = {
+class Parcel:
+	init_dict = {
 				"sender_id":0,
 				"status":"__",
 				"pick_up_address":"_",
@@ -16,17 +15,19 @@ class Parcel():
 				"size":"xyz"
 				}
 
-	def __init__(self, initDict):
+	def __init__(self, init_dict):
 		"""Initialize the post."""
-		self.sender_id = initDict["sender_id"]
-		self.status = initDict["status"]
-		self.pick_up_address = initDict["pick_up_address"]
-		self.destination = initDict["destination"]
-		self.description = initDict["description"]
-		self.sender_contact = initDict["sender_contact"]
-		self.receiver_name = initDict["receiver_name"]
-		self.receiver_contact = initDict["receiver_contact"]
-		self.size = initDict["size"]
+		self.sender_id = init_dict["sender_id"]
+		self.status = init_dict["status"]
+		self.pick_up_address = init_dict["pick_up_address"]
+		self.destination = init_dict["destination"]
+		self.description = init_dict["description"]
+		self.sender_contact = init_dict["sender_contact"]
+		self.receiver_name = init_dict["receiver_name"]
+		self.receiver_contact = init_dict["receiver_contact"]
+		self.size = init_dict["size"]
+		self.date_created = datetime.now()
+		self.date_modified = datetime.now()
 
 	def __str__(self):
 		return {
