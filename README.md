@@ -51,7 +51,7 @@ https://send-it-anorld-api.herokuapp.com
 # Language
 The application API is built on Python Flask micro api framework, hosted on Heroku. The UI is HTML, CSS and Javascript only.
 
-# Setup Repo Locally
+# Setup Locally
 You can clone this repo and use it on your machine, use this [link](https://github.com/Manorlds-Eaglespark/SendIT.git) to clone
 
 # Author
