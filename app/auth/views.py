@@ -2,9 +2,12 @@
 
 from . import auth_blueprint
 from flask.views import MethodView
-from flask import make_response, request, jsonify, abort
+from flask import make_response, request, jsonify, abort, json
 from app.models.User import User
+from app.database.Database import Database
 import re
+
+database = Database()
 
 
 class RegistrationView(MethodView):
@@ -13,17 +16,17 @@ class RegistrationView(MethodView):
     def post(self):
         """Handle POST request for this view. Url ---> /v1/auth/register"""
 
-        name = request.data['name']
+        name = json.loads(request.data)['name']
 
         if not isinstance(name, str) or len(name) < 3:
             return make_response(jsonify({"status message":"Name: - Enter only leters. More than 3 characters."})), 401
 
-        email = request.data['email']
+        email = json.loads(request.data)['email']
         
         if not re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", email) != None:
             return make_response(jsonify({"status message":"Please enter a valid Email."})), 401
 
-        password = request.data['password']
+        password = json.loads(request.data)['password']
         if len(password) < 8:
             return make_response(jsonify({"status message":"Make sure your password is at lest 8 letters"})), 401
         elif re.search('[0-9]',password) is None:
@@ -32,17 +35,13 @@ class RegistrationView(MethodView):
             return make_response(jsonify({"status message":"Make sure your password has a capital letter in it"})), 401
 
 
-        user = User.query.filter_by(email=request.data['email']).first()
+        user = database.get_registered_user(email, password)
 
         if not user:
             # There is no user so we'll try to register them
             try:
-                post_data = request.data
-                # Register the user
-                name = post_data['name']
-                email = post_data['email']
-                password = post_data['password']
                 user = User(name=name, email=email, password=password)
+                database.save_new_user(user)
                 ##save this user
 
 
@@ -76,8 +75,8 @@ class LoginView(MethodView):
     def post(self):
         """Handle POST request for this view. Url ---> /v1/auth/login"""
         
-        password = request.data['password']
-        email = request.data['email']
+        password = json.loads(request.data)['password']
+        email = json.loads(request.data)['email']
 
         if password == "":
             return make_response(jsonify({"status message":"Please enter a valid Password."})), 401
@@ -87,17 +86,19 @@ class LoginView(MethodView):
 
         try:
             # Get the user object using their email (unique to every user)
-            user = ##get user
-            # Try to authenticate the found user using their password
-            if user and user.password_is_valid(password):
-                # Generate the access token. This will be used as the authorization header
-                access_token = user.generate_token(user.id, user.email)
-                if access_token:
-                        response = {
-                            'status message': 'You logged in successfully.',
-                            'access_token':  access_token.decode()
-                        }
-                        return make_response(jsonify(response)), 200
+            data = database.get_registered_user(email)
+            if data:
+                user = User(data[1], data[2], data[3])##get user
+                # Try to authenticate the found user using their password
+                if data and User.password_is_valid(data[3], password):
+                    # Generate the access token. This will be used as the authorization header
+                    access_token = user.generate_token(data[0], user.email)
+                    if access_token:
+                            response = {
+                                'status message': 'You logged in successfully.',
+                                'access_token':  access_token.decode()
+                            }
+                            return make_response(jsonify(response)), 200
             else:
                 # User does not exist. Therefore, we return an error message
                 response = {

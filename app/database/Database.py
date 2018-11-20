@@ -17,7 +17,8 @@ class Database():
 
     def create_user_table(self):
         sql_command = """CREATE TABLE IF NOT EXISTS users(
-        id SERIAL PRIMARY KEY NOT NULL, email TEXT NOT NULL,
+        id SERIAL PRIMARY KEY NOT NULL, name TEXT NOT NULL,
+        email TEXT NOT NULL,
         password TEXT NOT NULL,
         date_created TIMESTAMP NOT NULL,
         date_modified TIMESTAMP NOT NULL)"""
@@ -69,7 +70,7 @@ class Database():
         postgres_insert_parcel_query = """ INSERT INTO parcels (id, sender_id, status, pick_up_address, destination,
         description, sender_contact, receiver_name, receiver_contact, size) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
         record_to_insert = (
-        parcel.id, parcel.sender_id, parcel.status, parcel.pick_up_address, parcel.destination, parcel.description,
+        parcel.sender_id, parcel.status, parcel.pick_up_address, parcel.destination, parcel.description,
         parcel.sender_contact, parcel.receiver_name, parcel.receiver_contact, parcel.size)
         self.cursor.execute(postgres_insert_parcel_query, record_to_insert)
         self.connection.commit()
@@ -124,13 +125,13 @@ class Database():
         self.connection.commit()
 
     def save_new_user(self, user):
-        postgres_insert_user_query = """ INSERT INTO users (id, name, email, password) VALUES (%s,%s,%s,%s)"""
-        record_to_insert = (user.id, user.name, user.email, user.password)
+        postgres_insert_user_query = """ INSERT INTO users (name, email, password, date_created, date_modified) VALUES (%s,%s,%s,%s,%s)"""
+        record_to_insert = (user.name, user.email, user.password, user.date_created, user.date_modified)
         self.cursor.execute(postgres_insert_user_query, record_to_insert)
         self.connection.commit()
 
-    def get_registered_user(self, email, password):
-        sql_select_user_query = """SELECT * FROM users WHERE email = %s AND password = %s"""
-        self.cursor.execute(sql_select_user_query, (email, password))
+    def get_registered_user(self, email):
+        sql_select_user_query = """SELECT * FROM users WHERE email = %s"""
+        self.cursor.execute(sql_select_user_query, (email,))
         user = self.cursor.fetchone()
         return user

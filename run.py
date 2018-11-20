@@ -4,7 +4,7 @@ from app import create_app
 config_name = os.getenv('APP_SETTINGS') # config_name = "development"
 app = create_app(config_name)
 
-from app.database import Database
+from app.database.Database import Database
 
 database = Database()
 database.create_user_table()

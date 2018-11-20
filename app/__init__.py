@@ -1,5 +1,5 @@
 # app/__init__.py
-from flask import Flask, request, jsonify, make_response, abort
+from flask import Flask, request, jsonify, make_response, json
 from app.database.Database import Database
 import os
 
@@ -47,13 +47,13 @@ def create_app(config_name):
 
                 if request.method == "POST":
 
-                    pick_up_address = request.data['pick_up_address'], 
-                    destination = request.data['destination']
-                    description = request.data['description']
-                    sender_contact = request.data['sender_contact']
-                    receiver_name = request.data['receiver_name']
-                    receiver_contact = request.data['receiver_contact']
-                    size = request.data['size']
+                    pick_up_address = json.loads(request.data)['pick_up_address'],
+                    destination = json.loads(request.data)['destination']
+                    description = json.loads(request.data)['description']
+                    sender_contact = json.loads(request.data)['sender_contact']
+                    receiver_name = json.loads(request.data)['receiver_name']
+                    receiver_contact = json.loads(request.data)['receiver_contact']
+                    size = json.loads(request.data)['size']
 
                     if not (pick_up_address and destination and description and sender_contact and receiver_name and receiver_contact and size):
                         return make_response(jsonify({"status message":"Please avail all the required details, and try again"})), 400
@@ -61,13 +61,13 @@ def create_app(config_name):
                     pcl_dict= {
                     "sender_id" : user_id,
                     "status" : "Initiated",
-                    "pick_up_address" : request.data['pick_up_address'],
-                    "destination" : request.data['destination'],
-                    "description" : request.data['description'],
-                    "sender_contact" : request.data['sender_contact'],
-                    "receiver_name" : request.data['receiver_name'],
-                    "receiver_contact" : request.data['receiver_contact'],
-                    "size" : request.data['size']
+                    "pick_up_address" : pick_up_address,
+                    "destination" : destination,
+                    "description" : description,
+                    "sender_contact" : sender_contact,
+                    "receiver_name" : receiver_name,
+                    "receiver_contact" : receiver_contact,
+                    "size" : size
                     }
 
                     parcel = Parcel(pcl_dict)

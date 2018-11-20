@@ -4,7 +4,6 @@ import uuid
 class Quotation():
 
 	initDict = {
-					"parcel_id":0,
 					"price":"____ UGX",
 					"parcel_items":"__",
 					"weight":"__ Kg",
@@ -17,7 +16,6 @@ class Quotation():
 				}
 
 	def __init__(self, initDict):
-		self.id = int(uuid.uuid4().clock_seq)
 		self.parcel_id = initDict["parcel_id"]
 		self.price = initDict["price"]
 		self.parcel_items = initDict["parcel_items"]

@@ -18,7 +18,6 @@ class Parcel():
 
 	def __init__(self, initDict):
 		"""Initialize the post."""
-		self.id = int(uuid.uuid4().clock_seq)
 		self.sender_id = initDict["sender_id"]
 		self.status = initDict["status"]
 		self.pick_up_address = initDict["pick_up_address"]

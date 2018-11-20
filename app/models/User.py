@@ -7,13 +7,15 @@ from datetime import datetime, timedelta
 
 
 
-class User():
+class User:
 
 	def __init__(self, name, email, password):
 		"""Initialize the user with an email and a password."""
 		self.name = name
 		self.email = email
 		self.password = Bcrypt().generate_password_hash(password).decode()
+		self.date_created = datetime.now()
+		self.date_modified = datetime.now()
 
 
 	def password_is_valid(self, password):
@@ -44,6 +46,14 @@ class User():
 			except Exception as e:
 				# return an error in string format if an exception occurs
 				return str(e)
+
+	@staticmethod
+	def password_is_valid(password1, password2):
+		"""
+		Checks the password against it's hash to validates the user's password
+		"""
+		return Bcrypt().check_password_hash(password1, password2)
+
 	@staticmethod
 	def decode_email(token):
 		"""Decodes the email from the Authorization header."""
