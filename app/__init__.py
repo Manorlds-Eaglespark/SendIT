@@ -17,7 +17,6 @@ def create_app(config_name):
     app = FlaskAPI(__name__, instance_relative_config=True)
     app.config.from_object(app_config['development'])
     app.config.from_pyfile('config.py')
-    db.init_app(app)
 
     def get_access_token():
         """Get the access token from the header"""
