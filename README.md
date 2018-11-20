@@ -1,4 +1,7 @@
-# SendIT   [![Build Status](https://travis-ci.org/Manorlds-Eaglespark/SendIT.svg?branch=api)](https://travis-ci.org/Manorlds-Eaglespark/SendIT)   [![Coverage Status](https://coveralls.io/repos/github/Manorlds-Eaglespark/SendIT/badge.svg?branch=api)](https://coveralls.io/github/Manorlds-Eaglespark/SendIT?branch=api)   <a href="https://codeclimate.com/github/Manorlds-Eaglespark/SendIT/maintainability"><img src="https://api.codeclimate.com/v1/badges/6e809a652b8b095e970b/maintainability" /></a>
+# SendIT   
+[![Build Status](https://travis-ci.org/Manorlds-Eaglespark/SendIT.svg?branch=api)](https://travis-ci.org/Manorlds-Eaglespark/SendIT)   [![Coverage Status](https://coveralls.io/repos/github/Manorlds-Eaglespark/SendIT/badge.svg?branch=api)](https://coveralls.io/github/Manorlds-Eaglespark/SendIT?branch=api)  
+<a href="https://codeclimate.com/github/Manorlds-Eaglespark/SendIT/maintainability"><img src="https://api.codeclimate.com/v1/badges/6e809a652b8b095e970b/maintainability" /></a>
+
 SendIT is a courier service that helps users deliver parcels to different destinations. SendIT provides courier quotes based on weight categories. 
 
 # Business Logic
@@ -21,22 +24,6 @@ https://manorlds-eaglespark.github.io/SendIT/
 # Hosted API
 https://send-it-anorld-api.herokuapp.com
 
-# Pivotal Tracker Board 
-https://www.pivotaltracker.com/n/projects/2220223
-
-# Repo Description
-Sofar there have 5 branches
-
-Main branch: Here will be the final code when the project is finally done
-
-UI: This is the develop branch of the user interface
-
-gh-pages: This is where the github pages can comfortably host the demo
-
-api: This is where the API is taking shape that will power the whole application to life.
-
-api_business: This is the develop branch of the api.
-
 # Heroku API Endpoints
 - GET v1/parcels       - Fetch all parcel delivery orders -> Admin
 
@@ -58,11 +45,11 @@ api_business: This is the develop branch of the api.
 	
 - PUT v1/quotations/<userId>/user      - A clients accepts a quote from Admin  -> User
 
-
 # Language
 The application API is built on Python Flask micro api framework, hosted on Heroku. The UI is HTML, CSS and Javascript only.
 
-
+# How to setup Repo Locally
+You can clone this repo and use it on your machine, use this [link](https://github.com/Manorlds-Eaglespark/SendIT.git) to clone
 
 # Author
 Arnold Mukone
