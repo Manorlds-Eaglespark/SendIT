@@ -6,4 +6,6 @@ app/models/__pycache__/
 app/auth/__pycache__/
 .idea/
 app/database/__pycache__/
+tests/__pycache__/
+app/data_store/__pycache__/
 
