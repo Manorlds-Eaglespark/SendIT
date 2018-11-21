@@ -141,8 +141,8 @@ class Database:
 
 	def save_new_user(self, user):
 		#save a new user to the database
-		postgres_insert_user_query = """ INSERT INTO users (name, email, password, date_created, date_modified) VALUES (%s,%s,%s,%s,%s)"""
-		record_to_insert = (user.name, user.email, user.password, user.date_created, user.date_modified)
+		postgres_insert_user_query = """ INSERT INTO users (name, email, password, is_admin, date_created, date_modified) VALUES (%s,%s,%s,%s,%s,%s)"""
+		record_to_insert = (user.name, user.email, user.password, user.is_admin, user.date_created, user.date_modified)
 		self.cursor.execute(postgres_insert_user_query, record_to_insert)
 		self.connection.commit()
 
@@ -156,7 +156,7 @@ class Database:
 	def create_all_tables(self):
 		#create all database tables for test purposes
 
-		sql_command_users_table = ("CREATE TABLE users"
+		sql_command_users_table = ("CREATE TABLE IF NOT EXISTS users"
 					   "(id SERIAL PRIMARY KEY, name TEXT NOT NULL,"
 					   "email TEXT NOT NULL,"
 					   "password TEXT NOT NULL,"
@@ -164,7 +164,7 @@ class Database:
 					   "date_created TIMESTAMP NOT NULL,"
 					   "date_modified TIMESTAMP NOT NULL)")
 
-		sql_command_parcels_table = ("CREATE TABLE parcels"
+		sql_command_parcels_table = ("CREATE TABLE IF NOT EXISTS parcels"
 					   "(id SERIAL PRIMARY KEY,"
 					   "sender_id INTEGER REFERENCES users(id),"
 					   "status TEXT NOT NULL,"
@@ -178,7 +178,7 @@ class Database:
 					   "date_created TIMESTAMP NOT NULL,"
 					   "date_modified TIMESTAMP NOT NULL)")
 
-		sql_command_quotations_table = ("CREATE TABLE quotations"
+		sql_command_quotations_table = ("CREATE TABLE IF NOT EXISTS quotations"
 					   "(id SERIAL PRIMARY KEY NOT NULL, parcel_id INTEGER REFERENCES parcels(id),"
 					   "price TEXT NOT NULL,"
 					   "parcel_items TEXT NOT NULL,"
@@ -198,9 +198,9 @@ class Database:
 		self.connection.commit()
 
 	def delete_all_tables(self):
-		sql_command_users_table = "DROP TABLE users"
-		sql_command_parcels_table = "DROP TABLE parcels"
-		sql_command_quotations_table = "DROP TABLE quotations"
+		sql_command_users_table = "DROP TABLE IF EXISTS users CASCADE"
+		sql_command_parcels_table = "DROP TABLE IF EXISTS parcels CASCADE"
+		sql_command_quotations_table = "DROP TABLE IF EXISTS quotations CASCADE"
 
 		self.cursor.execute(sql_command_users_table)
 		self.cursor.execute(sql_command_parcels_table)

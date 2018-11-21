@@ -14,6 +14,7 @@ class User:
 		self.name = name
 		self.email = email
 		self.password = Bcrypt().generate_password_hash(password).decode()
+		self.is_admin = "False"
 		self.date_created = datetime.now()
 		self.date_modified = datetime.now()
 

@@ -29,7 +29,6 @@ def create_app(config_name):
         return access_token
 
 
-#***************************************Fetch all parcel delivery orders & Make a new parcel delivery order
 
     @app.route('/v1/parcels', methods=['POST', 'GET'])
     def parcels():
@@ -55,19 +54,20 @@ def create_app(config_name):
                     receiver_contact = json.loads(request.data)['receiver_contact']
                     size = json.loads(request.data)['size']
 
-                    if not (pick_up_address and destination and description and sender_contact and receiver_name and receiver_contact and size):
+                    if not (pick_up_address and destination and description and sender_contact and
+                            receiver_name and receiver_contact and size):
                         return make_response(jsonify({"status message":"Please avail all the required details, and try again"})), 400
 
                     pcl_dict= {
-                    "sender_id" : user_id,
-                    "status" : "Initiated",
-                    "pick_up_address" : pick_up_address,
-                    "destination" : destination,
-                    "description" : description,
-                    "sender_contact" : sender_contact,
-                    "receiver_name" : receiver_name,
-                    "receiver_contact" : receiver_contact,
-                    "size" : size
+                        "sender_id" : user_id,
+                        "status" : "Initiated",
+                        "pick_up_address" : pick_up_address,
+                        "destination" : destination,
+                        "description" : description,
+                        "sender_contact" : sender_contact,
+                        "receiver_name" : receiver_name,
+                        "receiver_contact" : receiver_contact,
+                        "size" : size
                     }
 
                     parcel = Parcel(pcl_dict)
@@ -122,7 +122,7 @@ def create_app(config_name):
 
 #***************************************************************************Fetch all parcel delivery orders by a specific user
     @app.route('/v1/users/<the_user_id>/parcels', methods=['GET'])
-    def user_parcels(the_user_id, **kwargs):
+    def get_user_parcels(the_user_id, **kwargs):
         """Fetch order from one user"""
 
         access_token = get_access_token()
