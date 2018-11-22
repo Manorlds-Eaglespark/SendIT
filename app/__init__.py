@@ -41,7 +41,7 @@ def create_app(config_name):
                     size = json.loads(request.data)['size']
                     if not isinstance(size, int):
                         return make_response(
-                            jsonify({"message": "Please enter proper Kilogram size approximation number."})), 400
+                            jsonify({"message": "Please enter proper Kilogram size approximation as a number."})), 400
                     if not (pick_up_address and destination and description and sender_contact and
                             receiver_name and receiver_contact and size):
                         return make_response(jsonify({"message":"Please avail all the required details, and try again"})), 400
@@ -59,6 +59,7 @@ def create_app(config_name):
                     }
                     parcel = Parcel(parcel_dict)
                     database.save_parcel(parcel)
+                    the_added_parcel = database
                     parcel_item = {
                         'sender_id':parcel.sender_id,
                         'status':parcel.status,
@@ -109,6 +110,9 @@ def create_app(config_name):
         access_token = get_access_token()
         if access_token:
             user_id = User.decode_token(access_token)
+            admin_status = User.decode_admin_status(access_token)
+            if admin_status == "False":
+                return make_response(jsonify({"message": "Sorry, you are not authorized to access this route."})), 403
             if not isinstance(user_id, str):
                 parcels = database.get_parcels_for_one_user(the_user_id)
                 parcel_list = []
@@ -138,9 +142,12 @@ def create_app(config_name):
         access_token = get_access_token()
         if access_token:
             user_id = User.decode_token(access_token)
+            admin_status = User.decode_admin_status(access_token)
             if not isinstance(user_id, str):
                 if request.method == "GET":
                     parcel = database.get_one_parcel(given_id)
+                    if parcel[1] != user_id or admin_status == "False":
+                        return make_response(jsonify({"message":"You need to be admin to view this info."})), 403
                     if not parcel:
                         return make_response(jsonify({"message":"Sorry, Parcel not found!"})), 404
                     else:                  
@@ -171,15 +178,15 @@ def create_app(config_name):
         access_token = get_access_token()
         if access_token:
             user_id = User.decode_token(access_token)
+            admin_status = User.decode_admin_status(access_token)
             if not isinstance(user_id, str):
                 if request.method == "PUT":
                     parcel = database.get_one_parcel(parcel_id)
                     if not parcel:
                         return make_response(jsonify({"message":"Parcel not found!"})), 404
                     else:
-                        if not parcel[1] == user_id:
-                            return make_response(jsonify({
-                                                             "message": "Parcel belongs to someone else. Contact support immediately to clarify."})), 403
+                        if parcel[1] != user_id or admin_status == "False":
+                            return make_response(jsonify({"message": "You can only cancel a parcel you created"})), 400
                         database.change_status_of_parcel_cancel_delivery(parcel_id)
                         parcel = database.get_one_parcel(parcel_id)
                         parcel_item = {
@@ -223,7 +230,7 @@ def create_app(config_name):
                         if parcel[2] == "Cancelled":
                             return make_response(jsonify({"message": "You already cancelled this delivery"})), 400
                     if not parcel[1] == user_id:
-                        return make_response(jsonify({"message":"Parcel belongs to someone else. Contact support immediately to clarify."})), 403
+                        return make_response(jsonify({"message":"You can only update parcel orders you made. Contact support immediately to clarify."})), 403
                     database.change_destination_of_parcel(parcel_id, new_parcel_address, time_modified)
                     parcel = database.get_one_parcel(parcel_id)
                     parcel_item = {
