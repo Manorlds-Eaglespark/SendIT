@@ -1,12 +1,3 @@
-register_user3 = {
-    "name": "copper metal",
-    "email": "coppermetal@gmail.com",
-    "password": "Adsfaxxy210"
-}
-user_login_details3 = {
-    "email": "coppermetal@gmail.com",
-    "password": "Adsfaxxy210"
-}
 
 
 register_user = {
@@ -58,7 +49,7 @@ user_login_details_no_password = {
                     "password": "",
 }
 user_login_details_wrong_password = {
-                    "email": "manorldsapiens@gmail.com",
+                    "email": "coppermetal@gmail.com",
                     "password": "fgafgdvsadf",
 }
 user_login_details_invalid_email = {
@@ -66,7 +57,12 @@ user_login_details_invalid_email = {
                     "password": "fgafgdvsadf",
 }
 
+user_login_details_new_email = {
+                    "email": "kamal_here@gmail.com",
+                    "password": "fgafgdvsadf",
+}
+
 user_login_details3 = {
-                    "email": "kamondero@gmail.com",
-                    "password": "Adsfaxxy210"
+                         "email": "coppermetal@gmail.com",
+                         "password": "Adsfaxxy210"
                 }

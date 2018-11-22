@@ -7,9 +7,7 @@ app = create_app(config_name)
 from app.database.Database import Database
 
 database = Database()
-database.create_user_table()
-database.create_parcel_table()
-database.create_quotation_table()
+database.create_all_tables()
 
 if __name__ == '__main__':  
     app.run()

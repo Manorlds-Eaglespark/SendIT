@@ -8,15 +8,6 @@ class Config(object):
     CSRF_ENABLED = True
     SECRET = os.getenv('SECRET')
 
-POSTGRES = {
-    'user': 'postgres',
-    'pw': '',
-    'db': 'send_it',
-    'host': 'localhost',
-    'port': '5432',
-}
-
-
 class DevelopmentConfig(Config):
     """Configurations for Development."""
     DEBUG = True

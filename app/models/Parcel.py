@@ -1,6 +1,6 @@
 # app/models/Parcel.py
 
-from datetime import datetime, timedelta
+from datetime import datetime
 
 class Parcel:
 	init_dict = {
@@ -8,6 +8,7 @@ class Parcel:
 				"status":"__",
 				"pick_up_address":"_",
 				"destination":"_",
+				"current_location":"_",
 				"description":"_",
 				"sender_contact":"_",
 				"receiver_name":"_",
@@ -21,6 +22,7 @@ class Parcel:
 		self.status = init_dict["status"]
 		self.pick_up_address = init_dict["pick_up_address"]
 		self.destination = init_dict["destination"]
+		self.current_location = init_dict["current_location"]
 		self.description = init_dict["description"]
 		self.sender_contact = init_dict["sender_contact"]
 		self.receiver_name = init_dict["receiver_name"]
@@ -31,11 +33,11 @@ class Parcel:
 
 	def __str__(self):
 		return {
-        			"id": self.id,
         			"sender_id":self.sender_id,
         			"status":self.status,
         			"pick_up_address":self.pick_up_address,
         			"destination":self.destination,
+					"current_location":self.current_location,
         			"description":self.description,
         			"sender_contact":self.sender_contact,
         			"receiver_name":self.receiver_name,

@@ -20,8 +20,12 @@ class RegistrationView(MethodView):
 
         name = json.loads(request.data)['name']
 
+        validate_name = name.replace(" ", "")
+        if not validate_name.isalnum() and not validate_name.isalpha():
+            return make_response(jsonify({"message": "Enter only letter in the English alphabet."})), 401
+
         if not isinstance(name, str) or len(name) < 3:
-            return make_response(jsonify({"message":"Name field: - Enter only letters. More than 3 characters."})), 401
+            return make_response(jsonify({"message":"Enter more than 3 letters for name."})), 401
 
         email = json.loads(request.data)['email']
         
@@ -83,7 +87,7 @@ class LoginView(MethodView):
         if password == "":
             return make_response(jsonify({"message":"Please enter a valid Password."})), 401
 
-        if not re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", email) != None:
+        if not re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", email) is not None:
             return make_response(jsonify({"message":"Please enter a valid Email."})), 401
 
         try:
@@ -94,19 +98,25 @@ class LoginView(MethodView):
                 # Try to authenticate the found user using their password
                 if data and User.password_is_valid(data[3], password):
                     # Generate the access token. This will be used as the authorization header
-                    access_token = user.generate_token(data[0], user.email)
+                    access_token = user.generate_token(data[0], user.email, data[4])
                     if access_token:
                             response = {
                                 'message': 'You logged in successfully.',
                                 'access_token':  access_token.decode()
                             }
                             return make_response(jsonify(response)), 200
+                else:
+                    # User does not exist. Therefore, we return an error message
+                    response = {
+                        'message': 'Invalid Password, Please try again'
+                    }
+                    return make_response(jsonify(response)), 403
             else:
                 # User does not exist. Therefore, we return an error message
                 response = {
-                    'message': 'Invalid email or password, Please try again'
+                    'message': 'No account by that Email, please register first.'
                 }
-                return make_response(jsonify(response)), 401
+                return make_response(jsonify(response)), 400
 
         except Exception as e:
             # Create a response containing an string error message

@@ -10,7 +10,6 @@ from datetime import datetime, timedelta
 class User:
 
 	def __init__(self, name, email, password):
-		"""Initialize the user with an email and a password."""
 		self.name = name
 		self.email = email
 		self.password = Bcrypt().generate_password_hash(password).decode()
@@ -20,21 +19,18 @@ class User:
 
 
 	def password_is_valid(self, password):
-		"""
-		Checks the password against it's hash to validates the user's password
-		"""
 		return Bcrypt().check_password_hash(self.password, password)
 
-	def generate_token(self, user_id, email):
-			""" Generates the access token"""
+	def generate_token(self, user_id, email, is_admin):
 
 			try:
 				# set up a payload with an expiration time
 				payload = {
-					'exp': datetime.utcnow() + timedelta(minutes=43200),
+					'exp': datetime.utcnow() + timedelta(minutes=120),
 					'iat': datetime.utcnow(),
 					'sub': user_id,
-					'eml': email
+					'eml': email,
+					'adn':is_admin
 				}
 				# create the byte string token using the payload and the SECRET key
 				jwt_string = jwt.encode(
@@ -54,6 +50,12 @@ class User:
 		Checks the password against it's hash to validates the user's password
 		"""
 		return Bcrypt().check_password_hash(password1, password2)
+
+	@staticmethod
+	def decode_admin_status(token):
+		"""Decodes the email from the Authorization header."""
+		payload = jwt.decode( token, str(os.getenv('SECRET')), algorithms='HS256')
+		return payload['adn']
 
 	@staticmethod
 	def decode_email(token):
