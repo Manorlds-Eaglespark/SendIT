@@ -76,3 +76,32 @@ class User:
 		except jwt.InvalidTokenError:
 			# the token is invalid, return an error string
 			return "Invalid token. Please register or login"
+
+	@staticmethod
+	def users_list(users):
+		users_list = []
+		for user in users:
+			user_obj = {
+							'id': str(user[0]),
+							'name': str(user[1]),
+							'email': str(user[2]),
+							'password': str(user[3]),
+							'is_admin': str(user[4]),
+							'date_created': str(user[5]),
+							'date_modified': str(user[6])
+						}
+			users_list.append(user_obj)
+		return users_list
+
+	@staticmethod
+	def user_dictionary(user):
+		user_obj = {
+			'id': str(user[0]),
+			'name': str(user[1]),
+			'email': str(user[2]),
+			'password': str(user[3]),
+			'is_admin': str(user[4]),
+			'date_created': str(user[5]),
+			'date_modified': str(user[6])
+		}
+		return user_obj

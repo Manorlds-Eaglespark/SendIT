@@ -59,10 +59,15 @@ class Database:
         self.cursor.execute(sql_command)
 
     def get_all_users(self):
-        # get users in the database
         self.cursor.execute("SELECT * FROM users;")
         users = self.cursor.fetchall()
         return users
+
+    def get_like_this_in_database(self, parcel_date_created):
+        postgresql_select_parcels_query = "SELECT * FROM parcels where date_created = %s"
+        self.cursor.execute(postgresql_select_parcels_query, (parcel_date_created,))
+        parcel = self.cursor.fetchone()
+        return parcel
 
     def get_all_parcels(self):
         # get all the parcels in the database
@@ -111,41 +116,21 @@ class Database:
         sql_update_parcel_status_query = """UPDATE parcels SET status = %s WHERE id = %s"""
         self.cursor.execute(sql_update_parcel_status_query, ("Cancelled", parcel_id))
 
-    def get_all_quotations(self):
-        # Returns all quotations from database
-        postgresql_select_quotations_query = "SELECT * FROM quotations"
-        self.cursor.execute(postgresql_select_quotations_query)
-        quotation_records = self.cursor.fetchall()
-        return quotation_records
+    def make_admin(self, user_id):
+        sql_update_user_status_query = """UPDATE users SET is_admin = %s WHERE id = %s"""
+        self.cursor.execute(sql_update_user_status_query, ("True", user_id))
 
-    def save_quotation(self, quotation):
-        # saves a quotation to database
-        postgres_insert_quotation_query = """ INSERT INTO quotations (id, parcel_id, price, parcel_items, weight, sender_id, receiver_name, receiver_contact, approx_delivery_duration, prepared_by, acceptance_status) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
-        record_to_insert = (
-            quotation.id, quotation.parcel_id, quotation.price, quotation.parcel_items, quotation.weight,
-            quotation.sender_id, quotation.receiver_name, quotation.receiver_contact,
-            quotation.approx_delivery_duration,
-            quotation.prepared_by, quotation.acceptance_status)
-        self.cursor.execute(postgres_insert_quotation_query, record_to_insert)
+    def get_a_user(self, user_id):
+        sql_user_query = """SELECT * FROM users WHERE id = %s"""
+        self.cursor.execute(sql_user_query, (user_id,))
+        user = self.cursor.fetchone()
+        return user
 
-    def get_one_quotation(self, _id):
-        # get a specific quotation information from database given id
-        sql_select_quotation_query = """SELECT * FROM quotations where id = %s"""
-        self.cursor.execute(sql_select_quotation_query, (_id,))
-        quotation = self.cursor.fetchone()
-        return quotation
-
-    def get_quotations_for_one_user(self, user_id):
-        # get quotation info by a single user using a user id
-        sql_select_quotations_query = """SELECT * FROM quotations where sender_id = %s"""
-        self.cursor.execute(sql_select_quotations_query, (user_id,))
-        quotation = self.cursor.fetchall()
-        return quotation
-
-    def change_acceptance_status_of_quotation_cancel_delivery(self, quotation_id):
-        # change the acceptance status of a specific quotation
-        sql_update_quotation_status_query = """UPDATE quotations SET acceptance_status = %s WHERE id = %s"""
-        self.cursor.execute(sql_update_quotation_status_query, ("Cancelled", quotation_id))
+    def get_id_given_email(self, email):
+        sql_user_query = """SELECT id FROM users WHERE email = %s"""
+        self.cursor.execute(sql_user_query, (email,))
+        the_id = self.cursor.fetchone()
+        return the_id
 
     def save_new_user(self, user):
         # save a new user to the database

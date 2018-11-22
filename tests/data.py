@@ -76,6 +76,48 @@ new_parcel_1 = {
 	        "receiver_contact":"078585522",
 	        "size":250
 }
+new_parcel_2 = {
+	        "pick_up_address": "Masaka, Mityana road",
+	        "destination": "Gulu, Kema S.S",
+	        "description": "Maize milling machine",
+	        "sender_contact": "075255221",
+	        "receiver_name": "Simon Luke",
+	        "receiver_contact":"078585522",
+	        "size":"asdfsdafd"
+}
+
+new_parcel_3 = {
+	        "pick_up_address": "",
+	        "destination": "Gulu, Kema S.S",
+	        "description": "Maize milling machine",
+	        "sender_contact": "075255221",
+	        "receiver_name": "",
+	        "receiver_contact":"078585522",
+	        "size":""
+}
+
+new_parcel_4 = {
+	        "pick_up_address": "ghdghgf",
+	        "destination": "Gulu, Kema S.S",
+	        "description": "Maize milling machine",
+	        "sender_contact": "075255221",
+	        "receiver_name": "dfsgdfg",
+	        "receiver_contact":"078585522",
+	        "size":10
+}
+
+
+
+new_parcel_5 = {
+	        "pick_up_address": "ghdgjb,jhgf",
+	        "destination": "Gulu, Kema mlkmlS.S",
+	        "description": "Maize millinlj;;/mg machine",
+	        "sender_contact": "075255221",
+	        "receiver_name": "dfsgdfg",
+	        "receiver_contact":"078585522",
+	        "size":10
+}
+
 
 
 register_user4 = {
@@ -87,3 +129,54 @@ user_login_details4 = {
                         "email": "copperlingametal@gmail.com",
                         "password": "Adsfaxfsdfdsdxy210"
 }
+
+register_user5 = {
+                    "name": "copper linga rrrrrr  metal",
+                    "email": "copperlinrrrrgametal@gmail.com",
+                    "password": "Adsfaxfsdsfsdfffsfsdsdxy210"
+                }
+
+user_login_details5 = {
+                        "email": "copperlinrrrrgametal@gmail.com",
+                        "password": "Adsfaxfsdsfsdfffsfsdsdxy210"
+}
+
+
+
+register_user6 = {
+                    "name": "copper Good linga rrrrrr  metal",
+                    "email": "copperlfasdfasddinrrrrgametal@gmail.com",
+                    "password": "Adsfaxfdfasfdsdsfsdfffsfsdsdxy210"
+                }
+
+user_login_details6 = {
+                        "email": "copperlfasdfasddinrrrrgametal@gmail.com",
+                        "password": "Adsfaxfdfasfdsdsfsdfffsfsdsdxy210"
+}
+
+
+register_user7 = {
+                    "name": "copper Good linga rrrklklrrr  metal",
+                    "email": "copperlfasdfasddinrllrrrklkgametal@gmail.com",
+                    "password": "Adsfaxfkkkkdfasfdslldsfsdfffsfsdsdxy210"
+                }
+
+user_login_details7 = {
+                        "email": "copperlfasdfasddinrllrrrklkgametal@gmail.com",
+                        "password": "Adsfaxfkkkkdfasfdslldsfsdfffsfsdsdxy210"
+}
+
+
+register_user8 = {
+                    "name": "copper Good ligdsfgsfdnga rrrklklrrr  metal",
+                    "email": "copperlfasdfafgsfdgsddinrllrrrklkgametal@gmail.com",
+                    "password": "Adsfaxfkkksfgsdfkdfasfdslldsfsdfffsfsdsdxy210"
+                }
+
+user_login_details8 = {
+                        "email": "copperlfasdfafgsfdgsddinrllrrrklkgametal@gmail.com",
+                        "password": "Adsfaxfkkksfgsdfkdfasfdslldsfsdfffsfsdsdxy210"
+}
+
+admin_data2 = {"name": "Mr Admsdfsdin", "email": "admsdfsdin@sendit.com", "password": "sfa1sdfsda1AAdfa12"}
+admin_data_login2 = {"email": "admsdfsdin@sendit.com", "password": "sfa1sdfsda1AAdfa12"}

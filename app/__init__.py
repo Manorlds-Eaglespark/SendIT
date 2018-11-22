@@ -58,19 +58,20 @@ def create_app(config_name):
                         "size" : size
                     }
                     parcel = Parcel(parcel_dict)
-                    database.save_parcel(parcel)
-                    the_added_parcel = database
+                    database.save_parcel( Parcel(parcel_dict))
+                    the_added_parcel = database.get_like_this_in_database(parcel.date_created)
                     parcel_item = {
-                        'sender_id':parcel.sender_id,
-                        'status':parcel.status,
-                        'pick_up_address': parcel.pick_up_address[0],
-                        'destination': parcel.destination,
-                        'current_location':parcel.current_location[0],
-                        'description': parcel.description,
-                        'sender_contact': parcel.sender_contact,
-                        'receiver_name': parcel.receiver_name,
-                        'receiver_contact':parcel.receiver_contact,
-                        'size':str(parcel.size) +" Kgs"
+                        'id':the_added_parcel[0],
+                        'sender_id':the_added_parcel[1],
+                        'status':the_added_parcel[2],
+                        'pick_up_address': the_added_parcel[3],
+                        'destination': the_added_parcel[4],
+                        'current_location':the_added_parcel[5],
+                        'description': the_added_parcel[6],
+                        'sender_contact': the_added_parcel[7],
+                        'receiver_name': the_added_parcel[8],
+                        'receiver_contact':the_added_parcel[9],
+                        'size':str(the_added_parcel[10]) +" Kgs"
                         }
                     response = jsonify({"message":"New Delivery Order Successfully Added. Email sent to Admin.", "item":parcel_item})
                     return make_response(response), 201
@@ -146,25 +147,27 @@ def create_app(config_name):
             if not isinstance(user_id, str):
                 if request.method == "GET":
                     parcel = database.get_one_parcel(given_id)
-                    if parcel[1] != user_id or admin_status == "False":
-                        return make_response(jsonify({"message":"You need to be admin to view this info."})), 403
+
                     if not parcel:
                         return make_response(jsonify({"message":"Sorry, Parcel not found!"})), 404
-                    else:                  
-                            parcel_item = {
-                            'id': parcel[0],
-                            'sender_id':parcel[1],
-                            'status':parcel[2],
-                            'pick_up_address': parcel[3],
-                            'destination': parcel[4],
-                            'current_location':parcel[5],
-                            'description': parcel[6],
-                            'sender_contact': parcel[7],
-                            'receiver_name': parcel[8],
-                            'receiver_contact':parcel[9],
-                            'size':str(parcel[10])+" Kgs"
-                            }
-                            return make_response(jsonify(parcel_item)), 200
+                    else:
+
+                        if parcel[1] != user_id or admin_status == "False":
+                            return make_response(jsonify({"message": "You need to be admin to view this info."})), 403
+                        parcel_item = {
+                        'id': parcel[0],
+                        'sender_id':parcel[1],
+                        'status':parcel[2],
+                        'pick_up_address': parcel[3],
+                        'destination': parcel[4],
+                        'current_location':parcel[5],
+                        'description': parcel[6],
+                        'sender_contact': parcel[7],
+                        'receiver_name': parcel[8],
+                        'receiver_contact':parcel[9],
+                        'size':str(parcel[10])+" Kgs"
+                        }
+                        return make_response(jsonify(parcel_item)), 200
             else:
                 message = user_id
                 response = {
@@ -350,6 +353,48 @@ def create_app(config_name):
                     'message': message
                 }
                 return make_response(jsonify(response)), 401
+
+
+
+
+
+    @app.route('/api/v2/users', methods=['GET'])
+    def get_all_users():
+        access_token = get_access_token()
+        if access_token:
+            user_id = User.decode_token(access_token)
+            admin_status = User.decode_admin_status(access_token)
+            if admin_status == "False":
+                return make_response(jsonify({"message": "Sorry, you are not authorized to access this route."})), 403
+            if not isinstance(user_id, str):
+                users = database.get_all_users()
+                user_list = User.users_list(users)
+
+                if len(user_list):
+                    return make_response(jsonify(user_list)), 200
+                else:
+                    return make_response(jsonify({"message": "User has no orders or does not exist"})), 404
+
+
+
+    @app.route('/api/v2/users/<int:the_user_id>/admin', methods=['PUT'])
+    def make_a_user_admin(the_user_id):
+        access_token = get_access_token()
+        if access_token:
+            user_id = User.decode_token(access_token)
+            admin_status = User.decode_admin_status(access_token)
+            if admin_status == "False":
+                return make_response(jsonify({"message": "Sorry, you are not authorized to access this route."})), 403
+            if not isinstance(user_id, str):
+                database.make_admin(the_user_id)
+                user = database.get_a_user(the_user_id)
+
+                if user:
+                    return make_response(jsonify(User.user_dictionary(user))), 200
+                else:
+                    return make_response(jsonify({"message": "User has no orders or does not exist"})), 404
+
+
 
 
 
