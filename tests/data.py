@@ -66,3 +66,24 @@ user_login_details3 = {
                          "email": "coppermetal@gmail.com",
                          "password": "Adsfaxxy210"
                 }
+
+new_parcel_1 = {
+	        "pick_up_address": "Masaka, Mityana road",
+	        "destination": "Gulu, Kema S.S",
+	        "description": "Maize milling machine",
+	        "sender_contact": "075255221",
+	        "receiver_name": "Simon Luke",
+	        "receiver_contact":"078585522",
+	        "size":250
+}
+
+
+register_user4 = {
+                    "name": "copper linga metal",
+                    "email": "copperlingametal@gmail.com",
+                    "password": "Adsfaxfsdfdsdxy210"
+                }
+user_login_details4 = {
+                        "email": "copperlingametal@gmail.com",
+                        "password": "Adsfaxfsdfdsdxy210"
+}

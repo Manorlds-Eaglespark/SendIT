@@ -1,84 +1,164 @@
-# import sys
-# import os
-# # sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
-# import unittest
-# import json
-# from app import create_app
-# from app.database.Database import Database
-# from tests.data import *
-#
-#
-#
-# class TestFlaskApi(unittest.TestCase):
-#     def setUp(self):
-#
-#         self.app = create_app(config_name="development")
-#         self.client = self.app.test_client()
-#         self.database = Database()
-#         with self.app.app_context():
-#             self.database.delete_all_tables()
-#             self.database.create_all_tables()
-#         self.client.environ_base[
-#             'HTTP_AUTHORIZATION'] = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDUzODQ5MDgsImlhdCI6MTU0Mjc5MjkwOCwic3ViIjoyLCJlbWwiOiJta2Fub3JsZHNhcGllbnNAZ21haWwuY29tIn0.ajhX8Hd9PrNRi8NdMGCGP7rrJzVUUXfw0SW7u0xUja8" + "_"
-#         self.parcel = {
-#             "description": "Need 4 speed cd",
-#             "destination": "Banda stage, Jinja road",
-#             "pick_up_address": "Ssebagala stage, Kisasi",
-#             "receiver_contact": "0705622625",
-#             "receiver_name": "Ian Kendrick",
-#             "sender_contact": "0757877585",
-#             "size": "Small Parcel: Documents, Envelope items. less than 20KGs",
-#             "status": "Initiated by Client"
-#         }
-#
-#     # def test_get_all_orders(self):
-#     #     """"Test API to get all Parcel Delivery Orders"""
-#     #     response = self.app.get(
-#     #         '/v1/parcels')
-#     #     data = json.loads(response.data)
-#     #     self.assertEqual(response.status_code, 200)
-#     #     self.assertEqual(data["status message"], "All Parcel Delivery Orders")
-#     # #
-#     # def test_get_specific_delivery_order(self):
-#     #     response = self.app.get('/v1/parcels/1')
-#     #     data = json.loads(response.data)
-#     #     self.assertEqual(response.status_code, 200)
-#     #
-#     # def test_get_specific_delivery_order_not_there(self):
-#     #     response = self.app.get(
-#     #         '/v1/parcels/100')
-#     #     data = json.loads(response.data)
-#     #     self.assertEqual(response.status_code, 404)
-#     #
-#     def test_create_new_delivery_order(self):
-#         pass
-#         # response = self.client.post('/v1/parcels', data=json.dumps(self.parcel), content_type='application/json')
-#         # data = json.loads(response.data)
-#         # self.assertEqual(response.status_code, 201)
-#         # self.assertIn('New Delivery Order Successfully Added.', data['status message'])
-#
-#     # def test_cancel_a_delivery_order(self):
-#     #     response = self.app.put('/v1/parcels/2/cancel')
-#     #     data = json.loads(response.data)
-#     #     self.assertEqual(response.status_code, 202)
-#     #     self.assertIn('Item Successfully Cancelled', data['status message'])
-#     #
-#     # def test_get_delivery_orders_for_a_specific_user(self):
-#     #     response = self.app.get('/v1/users/2/parcels')
-#     #     data = json.loads(response.data)
-#     #     self.assertEqual(response.status_code, 200)
-#     #     self.assertIn('Success', data['status message'])
-#     #
-#     # def test_get_delivery_orders_for_a_specific_user_not_registered(self):
-#     #     response = self.app.get('/v1/users/200/parcels')
-#     #     data = json.loads(response.data)
-#     #     self.assertEqual(response.status_code, 404)
-#     #     self.assertIn('Fail- user has no orders or does not exist', data['status message'])
-#
-#
-#     def tearDown(self):
-#         self.database.delete_all_tables()
-#
-#
-# if __name__ == "__main__":
-#     unittest.main()
+import unittest
+import json
+from app import create_app
+from app.database.Database import Database
+from tests.data import *
+from app.models.Admin import Admin
+from app.data_store.data import admin_login, admin_data
+
+
+
+class TestFlaskApi(unittest.TestCase):
+    def setUp(self):
+        self.app = create_app(config_name="testing")
+        self.client = self.app.test_client()
+        self.database = Database()
+        self.database.create_all_tables()
+
+
+
+    def test_parcel_is_created(self):
+        self.client.post('/api/v1/auth/register', data=json.dumps(register_user3),
+                         content_type='application/json')
+        response = self.client.post('/api/v1/auth/login', data=json.dumps(user_login_details3),
+                                    content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.data)
+        self.assertIn('You logged in successfully.', data['message'])
+        response1 = self.client.post('/api/v1/parcels', data=json.dumps(new_parcel_1),
+                                    content_type='application/json', headers=({"Authorization": "Bearer "+str(data['access_token'])+"_"}))
+        data1 = json.loads(response1.data)
+        self.assertEqual(response1.status_code, 201)
+        self.assertEqual(data1['message'], 'New Delivery Order Successfully Added. Email sent to Admin.')
+
+
+
+
+    def test_admin_can_view_all_parcels(self):
+        admin = Admin(admin_data)
+        self.database.save_new_user(admin)
+        response = self.client.post('/api/v1/auth/login', data=json.dumps(admin_login),
+                                    content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.data)
+        ##############################################
+        self.client.post('/api/v1/auth/register', data=json.dumps(register_user4),
+                         content_type='application/json')
+        response1 = self.client.post('/api/v1/auth/login', data=json.dumps(user_login_details4),
+                                    content_type='application/json')
+        self.assertEqual(response1.status_code, 200)
+        data1 = json.loads(response1.data)
+        self.assertIn('You logged in successfully.', data1['message'])
+        response2 = self.client.post('/api/v1/parcels', data=json.dumps(new_parcel_1),
+                                    content_type='application/json', headers=({"Authorization": "Bearer "+str(data1['access_token'])+"_"}))
+        data2 = json.loads(response2.data)
+        self.assertEqual(response2.status_code, 201)
+        self.assertEqual(data2['message'], 'New Delivery Order Successfully Added. Email sent to Admin.')
+
+        response3 = self.client.get('/api/v1/parcels', headers=({"Authorization": "Bearer " + str(data['access_token']) + "_"}))
+
+        self.assertEqual(response3.status_code, 200)
+        # self.assertIn('You logged in successfully.', data['message'])
+
+
+    # def test_non_admin_cannot_view_all_parcels(self):
+    #     pass
+    # def test_creating_parcel_with_string_size(self):
+    #     pass
+    # def test_creating_parcel_with_fields_missing(self):
+    #     pass
+    #
+    #
+    # def test_get_parcels_by_user_id(self):
+    #     pass
+    # def test_get_parcels_by_user_id_not_there(self):
+    #     pass
+    # def test_get_parcels_by_user_with_no_parcel_orders(self):
+    #     pass
+    # def test_normal_user_can_not_view_parcels_for_user(self):
+    #     pass
+    #
+    #
+    # def test_cancel_parcel(self):
+    #     pass
+    # def test_cancel_parcel_not_sent_by_user(self):
+    #     pass
+    # def test_cancel_parcel_not_found(self):
+    #     pass
+    #
+    # def test_user_changes_destination(self):
+    #     pass
+    # def test_user_enters_numbers_as_new_destination_new_address(self):
+    #     pass
+    # def test_user_changes_destination_for_cancelled_parcel(self):
+    #     pass
+    # def test_user_changes_destination_for_delivered_parcel(self):
+    #     pass
+    # def test_user_changes_destination_for_parcel_not_theirs(self):
+    #     pass
+    #
+    #
+    # def test_admin_changes_parcel_status(self):
+    #     pass
+    # def test_non_admin_changes_parcel_status(self):
+    #     pass
+    # def test_admin_changes_status_of_non_existent_parcel(self):
+    #     pass
+    # def test_admin_changes_status_for_cancelled_parcel(self):
+    #     pass
+    # def test_admin_changes_status_for_delivered_parcel(self):
+    #     pass
+    # def test_admin_enters_numeric_status(self):
+    #     pass
+    #
+
+
+    # def test_admin_changes_parcel_present_location(self):
+    #     admin = Admin(admin_data)
+    #     self.database.save_new_user(admin)
+    #     response = self.client.post('/api/v1/auth/login', data=json.dumps(admin_login),
+    #                                 content_type='application/json')
+    #     self.assertEqual(response.status_code, 200)
+    #     data = json.loads(response.data)
+    #     self.assertIn('You logged in successfully.', data['message'])
+    #     response1 = self.client.post('/api/v1/parcels', data=json.dumps(new_parcel_1),
+    #                                 content_type='application/json', headers=({"Authorization": "Bearer "+str(data['access_token'])+"_"}))
+    #     data1 = json.loads(response.data)
+    #
+    #     self.client.post('/api/v1/auth/register', data=json.dumps(register_user3),
+    #                      content_type='application/json')
+    #     response = self.client.post('/api/v1/auth/login', data=json.dumps(user_login_details3),
+    #                                 content_type='application/json')
+    #     self.assertEqual(response.status_code, 200)
+    #     data = json.loads(response.data)
+    #     self.assertIn('You logged in successfully.', data['message'])
+    #     response3 = self.client.post('/api/v1/parcels', data=json.dumps(new_parcel_1),
+    #                                 content_type='application/json', headers=({"Authorization": "Bearer "+str(data['access_token'])+"_"}))
+    #     data3 = json.loads(response3.data)
+    #     self.assertEqual(response3.status_code, 201)
+    #
+    #     response4 = self.client.put('/api/v1/parcels/{data3["item"]}/presentLocation, data=json.dumps(new_parcel_1),
+    #                                 content_type='application/json', headers=({"Authorization": "Bearer "+str(data['access_token'])+"_"}))
+
+    # #
+    # def test_non_admin_changes_parcel_present_location(self):
+    #     pass
+    #
+    # def test_admin_changes_present_location_of_non_existent_parcel(self):
+    #     pass
+    #
+    # def test_admin_changes_present_location_for_cancelled_parcel(self):
+    #     pass
+    #
+    # def test_admin_changes_present_location_for_delivered_parcel(self):
+    #     pass
+    #
+    # def test_admin_enters_numeric_present_location(self):
+    #     pass
+    #
+    def tearDown(self):
+        self.database.delete_all_tables()
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -31,7 +31,7 @@ class Database:
                        "status TEXT NOT NULL,"
                        "pick_up_address TEXT NOT NULL,"
                        "destination TEXT NOT NULL,"
-                        "current_location TEXT NOT NULL,"
+                       "current_location TEXT NOT NULL,"
                        "description TEXT NOT NULL,"
                        "sender_contact TEXT NOT NULL,"
                        "receiver_name TEXT NOT NULL,"
@@ -72,9 +72,9 @@ class Database:
         return parcels_records
 
     def save_parcel(self, parcel):
-        # save a parcel to database
-        postgres_insert_parcel_query = """ INSERT INTO parcels (sender_id, status, pick_up_address, destination, current_location,
-		description, sender_contact, receiver_name, receiver_contact, size, date_created, date_modified) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
+        postgres_insert_parcel_query = ("INSERT INTO parcels ("
+        "sender_id, status, pick_up_address, destination, current_location,"
+		"description, sender_contact, receiver_name, receiver_contact, size, date_created, date_modified) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)")
         record_to_insert = (
             parcel.sender_id, parcel.status, parcel.pick_up_address, parcel.destination, parcel.current_location, parcel.description,
             parcel.sender_contact, parcel.receiver_name, parcel.receiver_contact, parcel.size, parcel.date_created,
