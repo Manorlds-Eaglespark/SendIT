@@ -159,9 +159,7 @@ class TestFlaskApi(unittest.TestCase):
         response2 = self.client.post('/api/v1/parcels', data=json.dumps(new_parcel_4),
                                         content_type='application/json', headers=({"Authorization": "Bearer "+str(data0['access_token'])+"_"}))
         data2 = json.loads(response2.data)
-        # self.assertEqual(response2.status_code, 201)
         i_d = (data2['item'])['id']
-        print(i_d)
         response3 = self.client.get('/api/v1/parcels/'+ str(i_d),
                                     headers=({"Authorization": "Bearer " + str(data_['access_token']) + "_"}))
         data3 = json.loads(response3.data)

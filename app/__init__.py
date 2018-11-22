@@ -152,7 +152,7 @@ def create_app(config_name):
                         return make_response(jsonify({"message":"Sorry, Parcel not found!"})), 404
                     else:
 
-                        if parcel[1] != user_id or admin_status == "False":
+                        if parcel[1] != user_id and admin_status == "False":
                             return make_response(jsonify({"message": "You need to be admin to view this info."})), 403
                         parcel_item = {
                         'id': parcel[0],

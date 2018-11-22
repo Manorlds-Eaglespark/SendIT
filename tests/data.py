@@ -97,7 +97,7 @@ new_parcel_3 = {
 }
 
 new_parcel_4 = {
-	        "pick_up_address": "ghdghgf",
+	        "pick_up_address": "ghdghgf jlnmknl",
 	        "destination": "Gulu, Kema S.S",
 	        "description": "Maize milling machine",
 	        "sender_contact": "075255221",
@@ -109,7 +109,7 @@ new_parcel_4 = {
 
 
 new_parcel_5 = {
-	        "pick_up_address": "ghdgjb,jhgf",
+	        "pick_up_address": "ghdgjb jhgf",
 	        "destination": "Gulu, Kema mlkmlS.S",
 	        "description": "Maize millinlj;;/mg machine",
 	        "sender_contact": "075255221",
