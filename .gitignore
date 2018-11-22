@@ -8,4 +8,4 @@ app/auth/__pycache__/
 app/database/__pycache__/
 tests/__pycache__/
 app/data_store/__pycache__/
-
+.env

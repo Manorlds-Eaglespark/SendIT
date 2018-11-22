@@ -16,13 +16,13 @@ register_user3 = {
                     "password": "Adsfaxxy210"
                 }
 user_invalid_email = {
-                    "name": "Bob_star",
+                    "name": "Bob Zumar star",
                     "email": "__lll652",
                     "password": "Adsfaxxy210"
 }
 
 user_no_name = {
-                    "name": "",
+                    "name": "      ",
                     "email": "bob@gmail.com",
                     "password": "Adsfaxxy210"
 }

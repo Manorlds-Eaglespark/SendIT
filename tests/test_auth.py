@@ -29,8 +29,8 @@ class TestFlaskApi(unittest.TestCase):
         response = self.client.post('/v1/auth/register', data=json.dumps(user_no_name),
                                  content_type='application/json')
         data = json.loads(response.data)
-        self.assertEqual(response.status_code, 401)
-        self.assertIn('Name field: - Enter only letters. More than 3 characters.', data['message'])
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual('Enter only letter in the English alphabet for name.', data['message'])
 
     def test_register_existing_user(self):
         self.client.post('/v1/auth/register', data=json.dumps(register_user2),

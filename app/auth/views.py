@@ -22,7 +22,7 @@ class RegistrationView(MethodView):
 
         validate_name = name.replace(" ", "")
         if not validate_name.isalnum() and not validate_name.isalpha():
-            return make_response(jsonify({"message": "Enter only letter in the English alphabet."})), 401
+            return make_response(jsonify({"message": "Enter only letter in the English alphabet for name."})), 400
 
         if not isinstance(name, str) or len(name) < 3:
             return make_response(jsonify({"message":"Enter more than 3 letters for name."})), 401
