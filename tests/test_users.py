@@ -14,7 +14,6 @@ class TestFlaskApi(unittest.TestCase):
         self.database = Database()
         self.database.create_all_tables()
 
-
     def test_get_list_of_users(self):
         admin = Admin(admin_data)
         self.database.save_new_user(admin)
@@ -37,21 +36,6 @@ class TestFlaskApi(unittest.TestCase):
         self.assertEqual(response2.status_code, 403)
 
 
-    def test_make_user_admin_non(self):
-        admin = Admin(admin_data2)
-        self.database.save_new_user(admin)
-        response = self.client.post('/api/v1/auth/login', data=json.dumps(admin_data_login2),
-                                    content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        data = json.loads(response.data)
-        #
-        self.client.post('/api/v1/auth/register', data=json.dumps(register_user4),
-                         content_type='application/json')
-
-
-        userz_id = self.database.get_id_given_email(user_login_details4['email'])
-        response2 = self.client.put('/api/v1/users/'+str(userz_id[0])+'/admin', headers=({"Authorization": "Bearer "+str(data['access_token'])+"_"}))
-        self.assertEqual(response2.status_code, 404)
 
 
     def tearDown(self):
