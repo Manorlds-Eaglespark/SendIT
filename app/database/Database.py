@@ -3,7 +3,7 @@ import os
 
 
 class Database:
-    """docstring for Database class""" 
+    """docstring for Database class"""
 
     def __init__(self):
         db_name = os.getenv("DATABASE")
