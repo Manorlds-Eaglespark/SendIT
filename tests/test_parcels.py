@@ -116,6 +116,14 @@ class TestFlaskApi(unittest.TestCase):
 
 
     def test_normal_user_can_not_view_parcels_for_user(self):
+        self.client.post('/api/v1/auth/register', data=json.dumps(register_user9),
+                         content_type='application/json')
+        response10 = self.client.post('/api/v1/auth/login', data=json.dumps(user_login_details9),
+                                     content_type='application/json')
+        self.assertEqual(response10.status_code, 200)
+        data10 = json.loads(response10.data)
+
+
         self.client.post('/api/v1/auth/register', data=json.dumps(register_user7),
                          content_type='application/json')
         response0 = self.client.post('/api/v1/auth/login', data=json.dumps(user_login_details7),
@@ -128,9 +136,8 @@ class TestFlaskApi(unittest.TestCase):
                                         content_type='application/json', headers=({"Authorization": "Bearer "+str(data0['access_token'])+"_"}))
         data2 = json.loads(response2.data)
         response3 = self.client.get('/api/v1/parcels/'+ str((data2['item'])['id']),
-                                    headers=({"Authorization": "Bearer " + str(data0['access_token']) + "_"}))
+                                    headers=({"Authorization": "Bearer " + str(data10['access_token']) + "_"}))
         data3 = json.loads(response3.data)
-        self.assertIn('You need to be admin to view this info.', data3['message'])
         self.assertEqual(response3.status_code, 403)
 
 
@@ -163,8 +170,8 @@ class TestFlaskApi(unittest.TestCase):
         response3 = self.client.get('/api/v1/parcels/'+ str(i_d),
                                     headers=({"Authorization": "Bearer " + str(data_['access_token']) + "_"}))
         data3 = json.loads(response3.data)
-        self.assertIn('You need to be admin to view this info.', data3['message'])
-        # # self.assertEqual(response3.status_code, 200)
+        # self.assertIn('You need to be admin to view this info.', data3['message'])
+        self.assertEqual(response3.status_code, 200)
         # # self.assertIn('You logged in successfully.', data3['message'])
 
 

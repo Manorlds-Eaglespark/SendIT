@@ -178,5 +178,18 @@ user_login_details8 = {
                         "password": "Adsfaxfkkksfgsdfkdfasfdslldsfsdfffsfsdsdxy210"
 }
 
+
+register_user9 = {
+                    "name": "copper Gobjhbod ligdsfgsfdnga rrrklklrrr  metal",
+                    "email": "copperlfasnnnnmndfafgsfdgsddinrllrrrklkgametal@gmail.com",
+                    "password": "Adsfaxfkkksnknkfgsdfkdfasfdslldsfsdfffsfsdsdxy210"
+                }
+
+user_login_details9 = {
+                        "email": "copperlfasnnnnmndfafgsfdgsddinrllrrrklkgametal@gmail.com",
+                        "password": "Adsfaxfkkksnknkfgsdfkdfasfdslldsfsdfffsfsdsdxy210"
+}
+
+
 admin_data2 = {"name": "Mr Admsdfsdin", "email": "admsdfsdin@sendit.com", "password": "sfa1sdfsda1AAdfa12"}
 admin_data_login2 = {"email": "admsdfsdin@sendit.com", "password": "sfa1sdfsda1AAdfa12"}

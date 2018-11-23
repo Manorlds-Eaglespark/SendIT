@@ -20,7 +20,7 @@ def create_app(config_name):
     def get_access_token():
         """Get the access token from the header"""
         auth_header = request.headers.get('Authorization')
-        if not auth_header:
+        if auth_header is None:
             return make_response(jsonify({"status message": "You have to login first."}))
         access_token = str(auth_header).split(" ")[1][:-1]
         return access_token
@@ -80,22 +80,25 @@ def create_app(config_name):
                     if admin_status == "True":
                         parcels = database.get_all_parcels()
                         parcel_list = []
-                        for parcel in parcels:
-                            obj = {
-                                    'id': parcel[0],
-                                    'sender_id':parcel[1],
-                                    'status':parcel[2],
-                                    'pick_up_address': parcel[3],
-                                    'destination': parcel[4],
-                                    'current_location':parcel[5],
-                                    'description': parcel[6],
-                                    'sender_contact': parcel[7],
-                                    'receiver_name': parcel[8],
-                                    'receiver_contact':parcel[9],
-                                    'size':str(parcel[10]) + " Kgs"
-                                    }
-                            parcel_list.append(obj)
-                        return make_response(jsonify(parcel_list)), 200
+                        if parcels:
+                            for parcel in parcels:
+                                obj = {
+                                        'id': parcel[0],
+                                        'sender_id':parcel[1],
+                                        'status':parcel[2],
+                                        'pick_up_address': parcel[3],
+                                        'destination': parcel[4],
+                                        'current_location':parcel[5],
+                                        'description': parcel[6],
+                                        'sender_contact': parcel[7],
+                                        'receiver_name': parcel[8],
+                                        'receiver_contact':parcel[9],
+                                        'size':str(parcel[10]) + " Kgs"
+                                        }
+                                parcel_list.append(obj)
+                            return make_response(jsonify(parcel_list)), 200
+                        else:
+                            return make_response(jsonify({"message":"There are no parcels to view"})), 200
                     else:
                         return make_response(jsonify({"message":"Sorry, you are not authorized to access this route."})), 403
             else:
@@ -188,7 +191,7 @@ def create_app(config_name):
                     if not parcel:
                         return make_response(jsonify({"message":"Parcel not found!"})), 404
                     else:
-                        if parcel[1] != user_id or admin_status == "False":
+                        if parcel[1] != user_id and admin_status == "False":
                             return make_response(jsonify({"message": "You can only cancel a parcel you created"})), 400
                         database.change_status_of_parcel_cancel_delivery(parcel_id)
                         parcel = database.get_one_parcel(parcel_id)
