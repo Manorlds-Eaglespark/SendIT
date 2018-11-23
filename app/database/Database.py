@@ -13,7 +13,7 @@ class Database:
         self.connection.autocommit = True
 
     def create_user_table(self):
-        # create a user table
+        """create a user table"""
         sql_command = ("CREATE TABLE IF NOT EXISTS users"
                        "(id SERIAL PRIMARY KEY, name TEXT NOT NULL,"
                        "email TEXT NOT NULL,"
@@ -24,7 +24,7 @@ class Database:
         self.cursor.execute(sql_command)
 
     def create_parcel_table(self):
-        # create a parcels table
+        """create a parcels table"""
         sql_command = ("CREATE TABLE IF NOT EXISTS  parcels"
                        "(id SERIAL PRIMARY KEY,"
                        "sender_id INTEGER REFERENCES users(id),"
@@ -42,7 +42,7 @@ class Database:
         self.cursor.execute(sql_command)
 
     def create_quotation_table(self):
-        # create a quotations table
+        """create a quotations table"""
         sql_command = ("CREATE TABLE IF NOT EXISTS quotations"
                        "(id SERIAL PRIMARY KEY NOT NULL, parcel_id INTEGER REFERENCES parcels(id),"
                        "price TEXT NOT NULL,"
@@ -70,7 +70,7 @@ class Database:
         return parcel
 
     def get_all_parcels(self):
-        # get all the parcels in the database
+        """get all the parcels in the database"""
         postgresql_select_parcels_query = "SELECT * FROM parcels"
         self.cursor.execute(postgresql_select_parcels_query)
         parcels_records = self.cursor.fetchall()
@@ -87,14 +87,14 @@ class Database:
         self.cursor.execute(postgres_insert_parcel_query, record_to_insert)
 
     def get_one_parcel(self, parcel_id):
-        # returns a parcel row given the parcel id
+        """returns a parcel row given the parcel id"""
         sql_select_parcel_query = """SELECT * FROM parcels where id = %s"""
         self.cursor.execute(sql_select_parcel_query, (parcel_id,))
         parcel = self.cursor.fetchone()
         return parcel
 
     def get_parcels_for_one_user(self, user_id):
-        # Get parcels of one user
+        """Get parcels of one user"""
         sql_select_parcels_query = """SELECT * FROM parcels where sender_id = %s"""
         self.cursor.execute(sql_select_parcels_query, (user_id,))
         parcel = self.cursor.fetchall()
@@ -133,7 +133,7 @@ class Database:
         return the_id
 
     def save_new_user(self, user):
-        # save a new user to the database
+        """save a new user to the database"""
         postgres_insert_user_query = """ INSERT INTO users (name, email, password, is_admin, date_created, date_modified) VALUES (%s,%s,%s,%s,%s,%s)"""
         record_to_insert = (user.name, user.email, user.password, user.is_admin, user.date_created, user.date_modified)
         self.cursor.execute(postgres_insert_user_query, record_to_insert)
