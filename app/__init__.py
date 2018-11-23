@@ -60,21 +60,24 @@ def create_app(config_name):
                     parcel = Parcel(parcel_dict)
                     database.save_parcel( Parcel(parcel_dict))
                     the_added_parcel = database.get_like_this_in_database(parcel.date_created)
-                    parcel_item = {
-                        'id':the_added_parcel[0],
-                        'sender_id':the_added_parcel[1],
-                        'status':the_added_parcel[2],
-                        'pick_up_address': the_added_parcel[3],
-                        'destination': the_added_parcel[4],
-                        'current_location':the_added_parcel[5],
-                        'description': the_added_parcel[6],
-                        'sender_contact': the_added_parcel[7],
-                        'receiver_name': the_added_parcel[8],
-                        'receiver_contact':the_added_parcel[9],
-                        'size':str(the_added_parcel[10]) +" Kgs"
-                        }
-                    response = jsonify({"message":"New Delivery Order Successfully Added. Email sent to Admin.", "item":parcel_item})
-                    return make_response(response), 201
+                    if the_added_parcel:
+                        parcel_item = {
+                            'id':the_added_parcel[0],
+                            'sender_id':the_added_parcel[1],
+                            'status':the_added_parcel[2],
+                            'pick_up_address': the_added_parcel[3],
+                            'destination': the_added_parcel[4],
+                            'current_location':the_added_parcel[5],
+                            'description': the_added_parcel[6],
+                            'sender_contact': the_added_parcel[7],
+                            'receiver_name': the_added_parcel[8],
+                            'receiver_contact':the_added_parcel[9],
+                            'size':str(the_added_parcel[10]) +" Kgs"
+                            }
+                        response = jsonify({"message":"New Delivery Order Successfully Added. Email sent to Admin.", "item":parcel_item})
+                        return make_response(response), 201
+                    else:
+                        return make_response(jsonify({"message":"parcel not created"})), 401
                 else:
                     admin_status = User.decode_admin_status(access_token)
                     if admin_status == "True":
@@ -119,6 +122,8 @@ def create_app(config_name):
                 return make_response(jsonify({"message": "Sorry, you are not authorized to access this route."})), 403
             if not isinstance(user_id, str):
                 parcels = database.get_parcels_for_one_user(the_user_id)
+                if not parcels:
+                    return make_response(jsonify({"message": "User has no orders or does not exist"})), 404
                 parcel_list = []
                 for parcel in parcels:
                         obj = {
@@ -135,10 +140,8 @@ def create_app(config_name):
                         'size':str(parcel[10])+" Kgs"
                         }
                         parcel_list.append(obj)
-                if len(parcel_list):
-                    return make_response(jsonify(parcel_list)), 200
-                else:
-                    return make_response(jsonify({"message": "User has no orders or does not exist"})), 404
+                return make_response(jsonify(parcel_list)), 200
+
               
 
     @app.route('/api/v1/parcels/<int:given_id>', methods=['GET'])
@@ -195,20 +198,23 @@ def create_app(config_name):
                             return make_response(jsonify({"message": "You can only cancel a parcel you created"})), 400
                         database.change_status_of_parcel_cancel_delivery(parcel_id)
                         parcel = database.get_one_parcel(parcel_id)
-                        parcel_item = {
-                        'id': parcel[0],
-                        'sender_id':parcel[1],
-                        'status':parcel[2],
-                        'pick_up_address': parcel[3],
-                        'destination': parcel[4],
-                        'current_location':parcel[5],
-                        'description': parcel[6],
-                        'sender_contact': parcel[7],
-                        'receiver_name': parcel[8],
-                        'receiver_contact':parcel[9],
-                        'size':str(parcel[10])+" Kgs"
-                        }
-                        return make_response(jsonify(parcel_item)), 202
+                        if parcel:
+                            parcel_item = {
+                            'id': parcel[0],
+                            'sender_id':parcel[1],
+                            'status':parcel[2],
+                            'pick_up_address': parcel[3],
+                            'destination': parcel[4],
+                            'current_location':parcel[5],
+                            'description': parcel[6],
+                            'sender_contact': parcel[7],
+                            'receiver_name': parcel[8],
+                            'receiver_contact':parcel[9],
+                            'size':str(parcel[10])+" Kgs"
+                            }
+                            return make_response(jsonify(parcel_item)), 202
+                        else:
+                            return make_response(jsonify({"message":"parcel not cancelled."})), 401
             else:
                 message = user_id
                 response = {
@@ -239,20 +245,23 @@ def create_app(config_name):
                         return make_response(jsonify({"message":"You can only update parcel orders you made. Contact support immediately to clarify."})), 403
                     database.change_destination_of_parcel(parcel_id, new_parcel_address, time_modified)
                     parcel = database.get_one_parcel(parcel_id)
-                    parcel_item = {
-                        'id': parcel[0],
-                        'sender_id': parcel[1],
-                        'status': parcel[2],
-                        'pick_up_address': parcel[3],
-                        'destination': parcel[4],
-                        'current_location': parcel[5],
-                        'description': parcel[6],
-                        'sender_contact': parcel[7],
-                        'receiver_name': parcel[8],
-                        'receiver_contact': parcel[9],
-                        'size': str(parcel[10]) + " Kgs"
-                    }
-                    return make_response(jsonify(parcel_item)), 202
+                    if parcel:
+                        parcel_item = {
+                            'id': parcel[0],
+                            'sender_id': parcel[1],
+                            'status': parcel[2],
+                            'pick_up_address': parcel[3],
+                            'destination': parcel[4],
+                            'current_location': parcel[5],
+                            'description': parcel[6],
+                            'sender_contact': parcel[7],
+                            'receiver_name': parcel[8],
+                            'receiver_contact': parcel[9],
+                            'size': str(parcel[10]) + " Kgs"
+                        }
+                        return make_response(jsonify(parcel_item)), 202
+                    else:
+                        return make_response(jsonify({"message":"new destination not set"})), 401
             else:
                 message = user_id
                 response = {
@@ -286,20 +295,22 @@ def create_app(config_name):
                                 jsonify({"message": "User cancelled this delivery"})), 400
                     database.update_status_of_parcel(parcel_id, new_status, time_modified)
                     parcel = database.get_one_parcel(parcel_id)
-                    parcel_item = {
-                        'id': parcel[0],
-                        'sender_id': parcel[1],
-                        'status': parcel[2],
-                        'pick_up_address': parcel[3],
-                        'destination': parcel[4],
-                        'current_location': parcel[5],
-                        'description': parcel[6],
-                        'sender_contact': parcel[7],
-                        'receiver_name': parcel[8],
-                        'receiver_contact': parcel[9],
-                        'size': str(parcel[10]) + " Kgs"
-                    }
-                    return make_response(jsonify(parcel_item)), 202
+                    if parcel:
+                        parcel_item = {
+                            'id': parcel[0],
+                            'sender_id': parcel[1],
+                            'status': parcel[2],
+                            'pick_up_address': parcel[3],
+                            'destination': parcel[4],
+                            'current_location': parcel[5],
+                            'description': parcel[6],
+                            'sender_contact': parcel[7],
+                            'receiver_name': parcel[8],
+                            'receiver_contact': parcel[9],
+                            'size': str(parcel[10]) + " Kgs"
+                        }
+                        return make_response(jsonify(parcel_item)), 202
+                    return make_response(jsonify({"message":"Address not changed"})), 401
 
             else:
                 message = user_id
@@ -336,20 +347,23 @@ def create_app(config_name):
                                 jsonify({"message": "User cancelled this delivery"})), 400
                     database.update_present_location_of_parcel(parcel_id, current_location, time_modified)
                     parcel = database.get_one_parcel(parcel_id)
-                    parcel_item = {
-                        'id': parcel[0],
-                        'sender_id': parcel[1],
-                        'status': parcel[2],
-                        'pick_up_address': parcel[3],
-                        'destination': parcel[4],
-                        'current_location': parcel[5],
-                        'description': parcel[6],
-                        'sender_contact': parcel[7],
-                        'receiver_name': parcel[8],
-                        'receiver_contact': parcel[9],
-                        'size': str(parcel[10]) + " Kgs"
-                    }
-                    return make_response(jsonify(parcel_item)), 202
+                    if parcel:
+                        parcel_item = {
+                            'id': parcel[0],
+                            'sender_id': parcel[1],
+                            'status': parcel[2],
+                            'pick_up_address': parcel[3],
+                            'destination': parcel[4],
+                            'current_location': parcel[5],
+                            'description': parcel[6],
+                            'sender_contact': parcel[7],
+                            'receiver_name': parcel[8],
+                            'receiver_contact': parcel[9],
+                            'size': str(parcel[10]) + " Kgs"
+                        }
+                        return make_response(jsonify(parcel_item)), 202
+                    else:
+                        return make_response(jsonify({"message":"parcel not updated"})), 401
             else:
                 message = user_id
                 response = {
