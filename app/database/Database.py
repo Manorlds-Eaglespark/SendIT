@@ -1,7 +1,7 @@
 import psycopg2
 import os
-
-
+from app.data_store.data import admin_data
+from app.models.Admin import Admin
 class Database:
     """docstring for Database class"""
 
@@ -11,6 +11,8 @@ class Database:
                                            database="d79qu8i9e3hqlv")
         self.cursor = self.connection.cursor()
         self.connection.autocommit = True
+        self.admin = Admin(admin_data)
+        self.database.save_new_user(self.admin)
 
     def create_user_table(self):
         """create a user table"""

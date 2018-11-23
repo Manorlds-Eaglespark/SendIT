@@ -11,8 +11,6 @@ from app.database.Database import Database
 database = Database()
 database.create_all_tables()
 database.delete_all_tables()
-admin = Admin(admin_data)
-database.save_new_user(admin)
 
 if __name__ == '__main__':  
     app.run()
