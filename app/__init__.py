@@ -17,6 +17,10 @@ def create_app(config_name):
     app.config.from_object(app_config['development'])
     app.config.from_pyfile('config.py')
 
+    admin = Admin(admin_data)
+    database.save_new_user(admin)
+
+
     def get_access_token():
         """Get the access token from the header"""
         auth_header = request.headers.get('Authorization')
