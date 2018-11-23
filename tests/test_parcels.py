@@ -239,7 +239,6 @@ class TestFlaskApi(unittest.TestCase):
                          content_type='application/json')
         response1 = self.client.post('/api/v1/auth/login', data=json.dumps(user_login_details3),
                                      content_type='application/json')
-        self.assertEqual(response.status_code, 200)
         data1 = json.loads(response1.data)
         self.assertIn('You logged in successfully.', data1['message'])
         response3 = self.client.post('/api/v1/parcels', data=json.dumps(new_parcel_1),
@@ -250,36 +249,8 @@ class TestFlaskApi(unittest.TestCase):
         response4 = self.client.put('/api/v1/parcels/' + str((data3["item"])['id']) + '/presentLocation',
                                     data=json.dumps(new_location),
                                     content_type='application/json',
-                                    headers=({"Authorization": "Bearer " + str(data['access_token']) + "_"}))
-        data4 = json.loads(response4.data)
-        self.assertEqual(response4.status_code, 202)
-
-
-    def test_admin_enters_numeric_present_location(self):
-        admin = Admin(admin_data2)
-        self.database.save_new_user(admin)
-        response_ = self.client.post('/api/v1/auth/login', data=json.dumps(admin_data_login2),
-                                     content_type='application/json')
-        self.assertEqual(response_.status_code, 200)
-        data_ = json.loads(response_.data)
-
-        self.client.post('/api/v1/auth/register', data=json.dumps(register_user13),
-                         content_type='application/json')
-        response1 = self.client.post('/api/v1/auth/login', data=json.dumps(user_login_details13),
-                                     content_type='application/json')
-        self.assertEqual(response1.status_code, 200)
-        data1 = json.loads(response1.data)
-        self.assertIn('You logged in successfully.', data1['message'])
-        response3 = self.client.post('/api/v1/parcels', data=json.dumps(new_parcel_1),
-                                     content_type='application/json',
-                                     headers=({"Authorization": "Bearer " + str(data1['access_token']) + "_"}))
-        data3 = json.loads(response3.data)
-        self.assertEqual(response3.status_code, 201)
-
-        response4 = self.client.put('/api/v1/parcels/' + str((data3["item"])['id']) + '/status',
-                                    data=json.dumps(new_status),
-                                    content_type='application/json',
                                     headers=({"Authorization": "Bearer " + str(data_['access_token']) + "_"}))
+        data4 = json.loads(response4.data)
         self.assertEqual(response4.status_code, 202)
 
 
