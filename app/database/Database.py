@@ -8,7 +8,7 @@ class Database:
     def __init__(self):
         db_name = os.getenv("DATABASE")
         self.connection = psycopg2.connect(user="wlovhtswtdroli", password="de5b58a980ee9fd04b435b4b95634a58a5968e330b41da3ae2bb611dd7a6b881", host="ec2-50-19-249-121.compute-1.amazonaws.com", port="5432",
-                                           database=d79qu8i9e3hqlv)
+                                           database="d79qu8i9e3hqlv")
         self.cursor = self.connection.cursor()
         self.connection.autocommit = True
 
