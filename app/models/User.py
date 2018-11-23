@@ -24,7 +24,6 @@ class User:
 	def generate_token(self, user_id, email, is_admin):
 
 			try:
-				# set up a payload with an expiration time
 				payload = {
 					'exp': datetime.utcnow() + timedelta(minutes=120),
 					'iat': datetime.utcnow(),
@@ -32,7 +31,6 @@ class User:
 					'eml': email,
 					'adn':is_admin
 				}
-				# create the byte string token using the payload and the SECRET key
 				jwt_string = jwt.encode(
 					payload,
 					str(os.getenv('SECRET')),
@@ -41,7 +39,6 @@ class User:
 				return jwt_string
 
 			except Exception as e:
-				# return an error in string format if an exception occurs
 				return str(e)
 
 	@staticmethod

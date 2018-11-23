@@ -44,27 +44,21 @@ class RegistrationView(MethodView):
         user = database.get_registered_user(email)
 
         if not user:
-            # There is no user so we'll try to register them
             try:
                 user = User(name=name, email=email, password=password)
                 database.save_new_user(user)
-                ##save this user
 
 
                 response = {
                     'message': 'You registered successfully. Please log in.'
                 }
-                # return a response notifying the user that they registered successfully
                 return make_response(jsonify(response)), 201
             except Exception as e:
-                # An error occurred, therefore return a string message containing the error
                 response = {
                     'message': str(e)
                 }
                 return make_response(jsonify(response)), 400
         else:
-            # There is an existing user. We don't want to register users twice
-            # Return a message to the user telling them that they they already exist
             response = {
                 'message': 'User already exists. Please login.'
             }
@@ -91,13 +85,10 @@ class LoginView(MethodView):
             return make_response(jsonify({"message":"Please enter a valid Email."})), 401
 
         try:
-            # Get the user object using their email (unique to every user)
             data = database.get_registered_user(email)
             if data:
-                user = User(data[1], data[2], data[3])##get user
-                # Try to authenticate the found user using their password
+                user = User(data[1], data[2], data[3])
                 if data and User.password_is_valid(data[3], password):
-                    # Generate the access token. This will be used as the authorization header
                     access_token = user.generate_token(data[0], user.email, data[4])
                     if access_token:
                             response = {
@@ -106,42 +97,33 @@ class LoginView(MethodView):
                             }
                             return make_response(jsonify(response)), 200
                 else:
-                    # User does not exist. Therefore, we return an error message
                     response = {
                         'message': 'Invalid Password, Please try again'
                     }
                     return make_response(jsonify(response)), 403
             else:
-                # User does not exist. Therefore, we return an error message
                 response = {
                     'message': 'No account by that Email, please register first.'
                 }
                 return make_response(jsonify(response)), 400
 
         except Exception as e:
-            # Create a response containing an string error message
             response = {
                 'message': str(e)
             }
-            # Return a server error using the HTTP Error Code 500 (Internal Server Error)
             return make_response(jsonify(response)), 500
 
 
-# Define the API resource
 registration_view = RegistrationView.as_view('registration_view')
 login_view = LoginView.as_view('login_view')
 
-# Define the rule for the registration url --->  /auth/register
-# Then add the rule to the blueprint
 auth_blueprint.add_url_rule(
-    '/v1/auth/register',
+    '/api/v1/auth/register',
     view_func=registration_view,
     methods=['POST'])
 
-# Define the rule for the registration url --->  /auth/login
-# Then add the rule to the blueprint
 auth_blueprint.add_url_rule(
-    '/v1/auth/login',
+    '/api/v1/auth/login',
     view_func=login_view,
     methods=['POST']
 
