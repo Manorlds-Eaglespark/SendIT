@@ -13,6 +13,7 @@ def create_app(config_name):
     from app.models.Quotation import Quotation
     from app.models.User import User
     from app.models.Admin import Admin
+    from app.data_store.data import admin_data
 
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_object(app_config['development'])
