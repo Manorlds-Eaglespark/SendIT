@@ -15,50 +15,33 @@ class TestFlaskApi(unittest.TestCase):
         self.database = Database()
         self.database.create_all_tables()
 
-
-
-    def test_cancel_parcel(self):
-        self.client.post('/api/v1/auth/register', data=json.dumps(register_user8),
-                             content_type='application/json')
-        response0 = self.client.post('/api/v1/auth/login', data=json.dumps(user_login_details8),
+    def test_creating_parcel_with_string_size(self):
+        self.client.post('/api/v1/auth/register', data=json.dumps(register_user6),
+                         content_type='application/json')
+        response0 = self.client.post('/api/v1/auth/login', data=json.dumps(user_login_details6),
                                      content_type='application/json')
         self.assertEqual(response0.status_code, 200)
         data0 = json.loads(response0.data)
+        self.assertIn('You logged in successfully.', data0['message'])
 
-        response2 = self.client.post('/api/v1/parcels', data=json.dumps(new_parcel_4),
-                                        content_type='application/json', headers=({"Authorization": "Bearer "+str(data0['access_token'])+"_"}))
-        data2 = json.loads(response2.data)
-        i_d = (data2['item'])['id']
+        response2 = self.client.post('/api/v1/parcels', data=json.dumps(new_parcel_2),
+                                     content_type='application/json',
+                                     headers=({"Authorization": "Bearer " + str(data0['access_token']) + "_"}))
+        self.assertEqual(response2.status_code, 400)
 
-        response4 = self.client.put('/api/v1/parcels/' + str(i_d) + '/cancel',
-                                    data=json.dumps(new_location),
-                                    content_type='application/json', headers=({"Authorization": "Bearer "+str(data0['access_token'])+"_"}))
-        self.assertEqual(response4.status_code, 202)
-
-
-    def test_cancel_parcel_not_sent_by_user(self):
-
-        self.client.post('/api/v1/auth/register', data=json.dumps(register_user12),
-                             content_type='application/json')
-        response0 = self.client.post('/api/v1/auth/login', data=json.dumps(user_login_details12),
+    def test_creating_parcel_with_fields_missing(self):
+        self.client.post('/api/v1/auth/register', data=json.dumps(register_user7),
+                         content_type='application/json')
+        response0 = self.client.post('/api/v1/auth/login', data=json.dumps(user_login_details7),
                                      content_type='application/json')
         self.assertEqual(response0.status_code, 200)
         data0 = json.loads(response0.data)
+        self.assertIn('You logged in successfully.', data0['message'])
 
-        response2 = self.client.post('/api/v1/parcels', data=json.dumps(new_parcel_4),
-                                        content_type='application/json', headers=({"Authorization": "Bearer "+str(data0['access_token'])+"_"}))
-        data2 = json.loads(response2.data)
-        i_d = (data2['item'])['id']
-
-        response4 = self.client.put('/api/v1/parcels/' + str(i_d) + '/cancel',
-                                    data=json.dumps(new_location),
-                                    content_type='application/json', headers=({"Authorization": "Bearer "+str(data0['access_token'])+"_"}))
-        self.assertEqual(response4.status_code, 202)
-
-
-
-
-
+        response2 = self.client.post('/api/v1/parcels', data=json.dumps(new_parcel_3),
+                                     content_type='application/json',
+                                     headers=({"Authorization": "Bearer " + str(data0['access_token']) + "_"}))
+        self.assertEqual(response2.status_code, 400)
 
     def tearDown(self):
         self.database.delete_all_tables()
