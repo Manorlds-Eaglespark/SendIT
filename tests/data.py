@@ -191,5 +191,73 @@ user_login_details9 = {
 }
 
 
+
+register_user10 = {
+                    "name": "copper Gobjhbod ligdsfbkjgsfdnga rrrklklrrr  metal",
+                    "email": "copperlfasnnnnmndfafgnknsfdgsddinrllrrrklkgametal@gmail.com",
+                    "password": "Adsfaxfkkksnknkfgsnkmkdfkdfasfdslldsfsdfffsfsdsdxy210"
+                }
+
+user_login_details10 = {
+                    "email": "copperlfasnnnnmndfafgnknsfdgsddinrllrrrklkgametal@gmail.com",
+                    "password": "Adsfaxfkkksnknkfgsnkmkdfkdfasfdslldsfsdfffsfsdsdxy210"
+}
+
+
+
+register_user11 = {
+                    "name": "copper Gobkbjkbjhbod ligdsfbkjgsfdnga rrrklklrrr  metal",
+                    "email": "copperlfasnnnnmndfafgjjjnknsfdgsddinrllrrrklkgametal@gmail.com",
+                    "password": "Adsfaxfkkksnknkfgsnkmkdfkdfasfdslldsfsdfffsfsdsdxy210"
+                }
+
+user_login_details11 = {
+                    "name": "copper Gobkbjkbjhbod ligdsfbkjgsfdnga rrrklklrrr  metal",
+                    "email": "copperlfasnnnnmndfafgjjjnknsfdgsddinrllrrrklkgametal@gmail.com",
+}
+
+
+register_user12 = {
+                    "name": "copper Gobjhbod ligdsfbkjgsfdnga rrrklklrrr",
+                    "email": "asnnnnmndfafgnknsfdgsddinrllrrrklkgametal@gmail.com",
+                    "password": "Adsfaxfkkksnknkfgsnkmkdfkdfasfdslldsfsdfffsfsdsdxy210"
+                }
+
+user_login_details12 = {
+                    "email": "asnnnnmndfafgnknsfdgsddinrllrrrklkgametal@gmail.com",
+                    "password": "Adsfaxfkkksnknkfgsnkmkdfkdfasfdslldsfsdfffsfsdsdxy210"
+}
+
+
+
+register_user13 = {
+                    "name": "copper Gobjhbod ligdsfdnga rrrklklrrr",
+                    "email": "asnnnnfdgsddinrllrrrklkgametal@gmail.com",
+                    "password": "Adsfaxfkkdfasfdslldsfsdfffsfsdsdxy210"
+                }
+
+user_login_details13 = {
+                        "email": "asnnnnfdgsddinrllrrrklkgametal@gmail.com",
+                        "password": "Adsfaxfkkdfasfdslldsfsdfffsfsdsdxy210"
+}
+
+
+new_location2 = {
+    "location":52
+}
+
+
+new_location = {
+    "location":"Kireka"
+}
+
+new_status = {
+    "status":"moving"
+}
+
 admin_data2 = {"name": "Mr Admsdfsdin", "email": "admsdfsdin@sendit.com", "password": "sfa1sdfsda1AAdfa12"}
 admin_data_login2 = {"email": "admsdfsdin@sendit.com", "password": "sfa1sdfsda1AAdfa12"}
+
+admin_data3 = {"name": "Mr Admskhgjdfsdin", "email": "admsdfhhjsdin@sendit.com", "password": "sfa1sdfsda1AAdfa12"}
+admin_data_login3 = {"email": "admsdfhhjsdin@sendit.com", "password": "sfa1sdfsda1AAdfa12"}
+
