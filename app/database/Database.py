@@ -11,8 +11,20 @@ class Database:
                                            database="d79qu8i9e3hqlv")
         self.cursor = self.connection.cursor()
         self.connection.autocommit = True
+
         self.admin = Admin(admin_data)
-        self.database.save_new_user(self.admin)
+
+        self.sql_command = ("CREATE TABLE IF NOT EXISTS users"
+                       "(id SERIAL PRIMARY KEY, name TEXT NOT NULL,"
+                       "email TEXT NOT NULL,"
+                       "password TEXT NOT NULL,"
+                       "is_admin TEXT NOT NULL,"
+                       "date_created TIMESTAMP NOT NULL,"
+                       "date_modified TIMESTAMP NOT NULL)")
+        self.postgres_insert_admin_query = """ INSERT INTO users (name, email, password, is_admin, date_created, date_modified) VALUES (%s,%s,%s,%s,%s,%s)"""
+        self.cursor.execute(self.sql_command)
+        self.record_to_insert = (self.admin.name, self.admin.email, self.admin.password, self.admin.is_admin, self.admin.date_created, self.admin.date_modified)
+        self.cursor.execute(self.postgres_insert_admin_query, self.record_to_insert)
 
     def create_user_table(self):
         """create a user table"""
@@ -59,6 +71,13 @@ class Database:
                        "date_created TIMESTAMP NOT NULL,"
                        "date_modified TIMESTAMP NOT NULL);")
         self.cursor.execute(sql_command)
+
+    def save_new_admin(self, user):
+        """save a new user to the database"""
+        postgres_insert_user_query = """ INSERT INTO users (name, email, password, is_admin, date_created, date_modified) VALUES (%s,%s,%s,%s,%s,%s)"""
+        record_to_insert = (user.name, user.email, user.password, user.is_admin, user.date_created, user.date_modified)
+        self.cursor.execute(postgres_insert_user_query, record_to_insert)
+
 
     def get_all_users(self):
         self.cursor.execute("SELECT * FROM users;")

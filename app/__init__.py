@@ -21,6 +21,7 @@ def create_app(config_name):
 
 
 
+
     def get_access_token():
         """Get the access token from the header"""
         auth_header = request.headers.get('Authorization')
